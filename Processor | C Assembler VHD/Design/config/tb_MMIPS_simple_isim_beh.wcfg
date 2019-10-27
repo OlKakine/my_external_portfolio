@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_MMIPS_simple_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="mmips_pkg" />
+            <top_module name="numeric_std" />
+            <top_module name="ram_prog_data_pkg" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_signed" />
+            <top_module name="tb_mmips_simple" />
+            <top_module name="textio" />
+            <top_module name="vcomponents" />
+            <top_module name="vital_primitives" />
+            <top_module name="vital_timing" />
+            <top_module name="vpkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="23" />
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PC/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PC/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider47" type="divider">
+      <obj_property name="label">PC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PC/cmd" type="array" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">cmd</obj_property>
+      <obj_property name="ObjectShortName">cmd</obj_property>
+      <obj_property name="label">cmd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PC/status" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">status</obj_property>
+      <obj_property name="ObjectShortName">status</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PC/state_q" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state_q</obj_property>
+      <obj_property name="ObjectShortName">state_q</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/irq" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">irq</obj_property>
+      <obj_property name="ObjectShortName">irq</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider27" type="divider">
+      <obj_property name="label">PO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/mem_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_addr[23:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_addr[23:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/mem_datain" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_datain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_datain[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/mem_dataout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_dataout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_dataout[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/mem_we" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_we</obj_property>
+      <obj_property name="ObjectShortName">mem_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/mem_ce" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_ce</obj_property>
+      <obj_property name="ObjectShortName">mem_ce</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/pout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">pout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pout[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/pout_valid" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">pout_valid</obj_property>
+      <obj_property name="ObjectShortName">pout_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/pc_q" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">pc_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_q[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rf_q[0:31]</obj_property>
+      <obj_property name="ObjectShortName">rf_q[0:31]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[1]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[2]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[3]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[3]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[4]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[4]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[5]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[5]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[6]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[6]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[7]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[7]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[8]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[8]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[9]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[9]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[10]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[10]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[11]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[11]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[12]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[12]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[13]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[13]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[14]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[14]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[15]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[15]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[16]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[16]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[17]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[17]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[18]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[18]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[18]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[19]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[19]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[19]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[20]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[20]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[20]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[21]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[21]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[21]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[22]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[22]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[22]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[23]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[23]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[23]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[24]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[24]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[24]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[25]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[25]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[25]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[26]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[26]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[26]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[27]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[27]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[27]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[28]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[28]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[28]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[29]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[29]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[29]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[30]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[30]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[30]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/rf_q[31]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[31]</obj_property>
+         <obj_property name="ObjectShortName">rf_q[31]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/ad_q" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ad_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ad_q[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/dt_q" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dt_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dt_q[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/ir_q" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ir_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ir_q[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/x" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">x[31:0]</obj_property>
+      <obj_property name="ObjectShortName">x[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/y" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">y[31:0]</obj_property>
+      <obj_property name="ObjectShortName">y[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mmips_simple/C_MMIPS_IO/C_PROCESSEUR/PO/alu_res" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">alu_res[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_res[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>
