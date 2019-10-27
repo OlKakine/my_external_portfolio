@@ -1,0 +1,698 @@
+---
+title: "Séance de travaux pratiques 1"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+** **
+
+#### [Introduction à R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) 
+
+
+- Liste des [fonctions de base](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html).
+
+- Introduction à la programmation en R [Vincent Goulet](https://cran.r-project.org/doc/contrib/Goulet_introduction_programmation_R.pdf)
+
+- R pour les débutants [Emmanuel Paradis](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_fr.pdf)
+
+- [Introduction à R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) 
+
+
+
+** **
+
+
+**IMPORTANT** : Cet énoncé est un document de travail interactif personnel **qui ne doit pas être rendu**. Le **compte-rendu de TP est un document séparé** et seul **le compte-rendu doit être déposé dans TEIDE en fin de séance** au format HTML. 
+
+Il est fortement conseillé **de préparer le TP** pour le réussir et pour **déposer le compte-rendu** dans de bonnes conditions. La préparation consiste à lire l'intégralité du TP, à en comprendre les principales étapes et celles nécessitant des recherches dans l'aide du programme. La préparation consiste aussi à lire le fichier de compte-rendu pour **identifier les réponses à rendre dans l'énoncé**.
+
+Le **rendu porte notamment sur les questions finales**. Il faut gérer son temps le mieux possible. La préparation et une bonne organisation pendant le TP sont essentielles. 
+
+
+
+** **
+#### Objectif
+
+L'objectif de cette séance de travaux pratiques et de manipuler les objets de base du langage R, vecteurs, matrices, listes, fonctions, et d'effecter des analyses simples à partir de données simulées et de données réelles. 
+
+On prendra soin de commenter les codes R tout au long des questions du TP. Il est demandé de compléter certains codes en utilisant l'aide en ligne du programme avec la commande `help()`. 
+
+**Tous les codes rendus devront être commentés et les commentaires compteront pour une par importante dans la note**.
+
+
+### Exercice 1: Vecteurs, matrices, listes et fonctions (45 minutes)
+
+
+#### Création de vecteurs  
+
+Pour créer des vecteurs en R, on peut utiliser les fonctions  `c()`, `seq()`, `rep()`, `sample()` ou bien d'autres. Nous étudions quelques exemples portant la manipulation de vecteurs en R. 
+
+* Utiliser la fonction `c()` pour definir des vecteurs. Commenter et compléter les codes suivants.
+
+```{r}
+# comment 1
+  x <- c("chat","chien", 0) #0 est automatiquement converti en 'character'
+  x
+# calcule la longueur du vecteur x
+  change_moi(x)
+```
+
+```{r}
+  # comment 2
+  x <- c(1, 6, 7, 2)
+  x
+
+  # comment 3  
+  cat("x est il 'numeric' ? ", is.numeric(x), "\n")
+  
+  # calcule la somme des éléments de x
+  sum(x)
+```
+
+* Pour un vecteur d'entiers consécutifs, on peut utiliser la syntaxe `:`. Notons que `seq` permet de définir des séquences arbitraires. Commenter et compléter le code suivant.
+
+```{r}
+  # comment 1
+  x <- 1:10
+  x
+
+  # définit une suite allant de 1 a 10 avec un pas de 0.1  
+  help(seq)
+  x <- seq(complete_moi)
+  x
+```
+
+
+* La fonction `rep()` peut être utilisée pour définir des motifs répétés. Commenter et compléter le code suivant.
+
+```{r}
+  # comment 1
+  help(rep)
+  x <- rep(1:2, each = 3)
+  x
+  
+  # crée la séquence 1 2 1 2 1 2 
+  x <- rep(change_moi)
+  x
+```
+
+* La fonction `sample()` peut être utilisée pour effectuer un tirage dans une urne avec ou sans replacement. Commenter et compléter le code suivant.
+
+```{r}
+  # Effectuer 100 tirages dans une urne contenant deux 'boules' bleues 
+  # et une boule orange 
+  help(sample)
+  urne <- c("blue", "blue", "orange")
+  x <- sample(urne, remplace_moi)
+
+  # comment 1
+  help(table)
+  table(x)
+```
+
+
+
+
+*  La fonction `sample()` peut être utilisée pour échantillonner (ou simuler) une loi discrete à support fini. On souhaite effectuer 1000 tirages de la loi définie de la manière suivante
+
+$$
+ p(x = i) \propto \frac1i , \quad  \forall i = 1, \dots, 8.
+$$
+
+Commenter et compléter le code suivant.
+
+```{r}
+  # comment 1
+  x <- sample(1:8, 1000, complete_moi)
+
+  # comment 2
+  table(x)
+```
+
+
+
+
+* Une particularité très intéressante en R et de pouvoir représenter une condition par un vecteur logique (`logical`). Dans le vecteur `x` généré par le code précédent, on cherche à compter le nombre de 1 présents dans ce vecteur, puis le nombre de valeurs différentes de 1 dans ce vecteur. Commenter et compléter le code suivant.
+
+```{r}
+  # comment 1
+  boo <- (x == 1)
+  class(boo)
+  
+  # compte le nombre de 1 dans le vecteur x
+  sum(change_moi)
+  
+  # compte le nombre de valeurs differentes de 1 dans le vecteur x 
+  # la négation s'exprime par "!="
+  trouve_moi
+```
+
+Voici un exemple de ce qu'il ne faut pas faire en R, bien que cela soit parfaitement correct d'un point de vue de la programmation.
+
+```{r}
+   # compte le nombre de 1 dans le vecteur x
+   compte_les_un <- function(x){
+     
+     if (!is.numeric(x)) {stop("x must be numeric.")}
+     
+     n <- length(x)
+     
+     resultat <- 0
+     
+     for (i in 1:n){
+       
+       if (x[i] == 1) {
+         resultat <- resultat + 1 
+       }
+     }
+     
+     return(resultat)
+   } 
+
+
+ # Applique la fonction compte_les_un à x
+  compte_les_un(x)
+```
+
+
+
+* Pour toute valeur $i$ allant de 1 à 8, calculer le nombre d'apparition de $i$ dans le vecteur `x`. Commenter et compléter le code suivant
+
+
+```{r}
+  # On applique une fonction comptant le nombre d'apparition à chaque élément de x
+  # help(sapply)
+  tab <-  sapply(1:8, FUN = function(i){ change_moi })
+
+  # comment 1 
+  names(tab) <- 1:8
+  tab
+```
+
+
+
+* On considère la suite finie $x_i = \sin(i)$, $i = 1,\dots,n = 123$. Combien de termes de cette suite sont plus grands que 1/2.  
+
+```{r}
+  # comment 1 : Ultimate Question of Life
+  help(sin)
+  trouve_la_ligne_1
+  trouve_la_ligne_2
+```
+
+
+
+* On effectue un million de tirages de valeurs entre 1 et 12 de sorte que la probabilité de chaque valeur $i$ est proportionnelle à $1/i$. Calculer la fréquence de nombre pairs. Commenter et compléter le code suivant
+
+```{r}
+  # comment 1
+  x <- sample(1:12, 1000000, complete_moi)
+
+  # comment 2
+  # Le reste de la division par 2 ("modulo 2") s'écrit "%% 2"
+  mean( condition_logique )
+```
+
+
+
+* Calculer exactement la probabilité pour qu'un tirage soit pair. 
+
+```{r}
+  # comment 1
+  trois_lignes_de_code_max
+```
+
+
+
+##### Création de matrices
+
+Pour créer des matrices en R, on peut utiliser les fonctions  `matrix()`, `as.matrix()` ou `data.matrix()`. Les matrices sont en fait des vecteurs dont on précise le mode de lecture. Nous étudions quelques exemples portant la manipulation de matrices en R. 
+
+* Créer une matrice `m` ayant 3 lignes et 4 colonnes telle que la première ligne ne contient que des 1, la deuxième ne contient que des 2 et la troisième ne contient que des 3. Commenter et compléter le code suivant
+
+```{r}
+  # comment 1
+  x <- rep(1:3, 4)
+  x
+  
+  # comment 2
+  help(matrix)
+  m <- matrix(x, nrow = 3, byrow = complete_moi)
+  m
+```
+ 
+* Remplacer toutes les valeurs égales à 2 par des 4. Commenter et compléter le code suivant
+  
+```{r}  
+  # comment 1
+  m[ m ==  2 ] <- change_me
+  m
+```
+
+* Lire les données **BreastCancer** de la bibliothèque `mlbench` et les convertir en matrice. Les données représentent des mesures effectuées sur des tumeurs du sein chez 699 patients. Les mesures sont associées aux diagnostics "benign" (bénin) ou "malignant" (grave). Exécuter le code suivant.
+
+```{r}
+  #install.packages("mlbench")
+  library('mlbench')
+  help(BreastCancer)
+
+  # charge les données en mémoire et visualise les premières lignes
+  data(BreastCancer)
+  head(BreastCancer)
+
+  # crée une matrice à partir du tableau de données "BreastCancer"
+  mat_bc <- data.matrix(BreastCancer)
+```
+
+* À l'aide des commandes `anyNA` ou `is.na`, tester l'existence de valeur manquantes  dans la matrice `mat_bc`.
+
+```{r}
+  # teste l'existence de valeur manquantes dans mat_bc
+  help(anyNA)
+  complete_le_code
+```
+
+
+
+
+* Calculer la valeur moyenne de la variable **Cell.size** pour les patientes. Combien de patientes ont une valeur > moyenne + 2*sd ? Combien de ces patientes ont des diagnostics "malignant" ?
+
+ 
+```{r}
+  # comment 1 : moyenne et sd de la variable "Cell.Size"
+  help(sd)
+  mean(mat_bc[,"Cell.size"])
+  calcule_sd_cell.size_toi_meme
+
+  # comment 2 : Combien de patientes ont une valeur > moyenne + 2*sd
+  condition <-  mat_bc[,"Cell.size"] >  moyenne_plus_2sd
+  donne_la_reponse
+
+  # comment 3 : Combien de ces patientes ont des diagnostics "malignant" ?
+  table(BreastCancer$Class[condition])
+```
+
+* Créer une matrice `mat_bc_no_na` où toutes les lignes ayant des valeurs manquantes sont enlevées.  Commenter et compléter le code suivant
+
+```{r}
+  # comment 1
+  help(apply)
+
+  boo_na <- apply(mat_bc, MARGIN = 1, change_moi)
+  mat_bc_no_na <- mat_bc[change_me, ]
+  
+  # comment 2
+  dim(mat_bc_no_na) 
+```
+
+
+##### Création de listes
+
+
+Les listes font parties des types de données les plus fréquemment rencontrés en R. Une liste peut comporter une suite d'objets quelconques que l'on peut éventuellement nommer. 
+
+Pour créer une liste, on peut utiliser la fonction `list()`. Les arguments listés sont accessibles par leurs noms précédés d'un symbole dollar ou par un double crochet.
+
+* On souhaite constituer une liste de longueur 2 contenant des vecteurs nommés "cell_size" et "mitoses".  Commenter et compléter le code suivant.
+
+
+```{r}
+  # comment 1
+  x1 <- rlnorm(100, mean = 3, sd = 1.7)
+  x2 <- sample(1:20, 100, rep = TRUE) 
+  
+  # comment 2
+  my_data <- list(cell_size = x1, change_moi)
+  summary(my_data)
+```
+
+
+
+* Utiliser la commande `summary` pour donner un résumé de la variable `mitose` 
+
+```{r}
+  # comment 1
+
+  summary( change_me$mitoses )
+  summary( change_me$mit ) # ce n'est pas recommandé
+  summary( change_me[[2]])
+```
+
+
+* Modifier la liste `my_data` en lui ajoutant un argument `summary` contenant les moyennes des vecteurs `cell_size` et `mitoses` 
+ 
+```{r}
+  # comment 1
+
+  help(lapply)
+  m <- lapply(my_data, change_moi)
+  my_data$summary <- cambia_mi 
+  
+  # comment 2
+  
+  my_data
+  my_data$summary$cell_sizes
+```
+
+
+* Lorsque les arguments sont des vecteurs de même longueur, vérifier que l'on peut créer une liste sous le format "data.frame" (tableau de données). Dans ce cas, il est possible d'appliquer des fonctions spécificiques à l'analyse des tableaux de données. 
+
+
+```{r}
+  df <- data.frame(cell_size = round(x1, 2), mitoses = x2)
+  help(head)
+  head(df, n = 10)
+```
+
+
+
+
+##### Création de fonctions
+
+Une fonction est une partie de code recevant une ou plusieurs informations à partir desquelles elle retourne un résultat. Bien que nous utiliserons le plus souvent les fonctions des bibliothèques de base ou de bibliothèques installées, il est utile de pouvoir en construire soi-même.
+
+* Créer une fonction `f(x)` prenant en entrée un vecteur numérique et retournant une liste contenant la moyenne et l'écart type de `x` (fonctions `mean`, `sd`).  Commenter et compléter le code suivant.
+
+
+```{r}
+f <-function(x){
+  # description  
+  
+  # comment 1
+  if (!is.numeric(x)) stop("x must be numeric. \n")
+  
+  # comment 2
+  object <- list( complete_moi )
+  return(object)
+}
+```
+
+
+* Appliquer la fonction `f(x)` à un vecteur contenant $n = 10000$ valeurs tirées selon la loi $N(0,1)$.
+
+```{r}
+ # comment 1
+ help(rnorm)
+
+ x <- change_moi
+ f(x)
+```
+
+
+
+* Créer une fonction prenant en entrée un tableau de données, le convertissant en matrice et éliminant les lignes contenant des données manquantes. 
+
+```{r}
+rm_na <-function(df){
+  # description : convertit en matrice et élimine les lignes avec NA 
+  
+  # teste la variable d'entrée
+  if (!is.data.frame(df)) stop("df must be a dataframe. \n")
+
+  # conversion en matrix
+  X <- as.matrix( change_moi )
+  
+  # teste les lignes contenant des NA et les enleve
+  boo <- apply(change_moi, MARGIN = change_me, FUN = anyNA)
+  X <- X[!boo, ]
+  
+  return(X)
+}
+```
+
+
+* Appliquer la fonction `rm_na` au tableau ci-dessous. 
+
+```{r}
+  df <- data.frame(x1 = runif(10), x2 = runif(10))
+  df[df > 0.7] <-  NA
+  rm_na(df)
+```
+
+
+
+#### Exercice 2 : Produit matriciel, valeurs propres (30 minutes)
+
+
+##### valeurs propres.
+
+On définit la matrice symmétrique $C$ de la manière suivante. 
+
+```{r}
+C <- matrix(c(5, -1, -1, 1), nrow  = 2)
+C 
+cat("Determinant de C = ", det(C))
+```
+
+
+* Calculer les valeurs propres ($\lambda$) et les vecteurs propres $U$ de la matrice $C$ en commentant et complétant le code suivant.
+
+```{r}
+  # comment 1 : 
+  help(eigen)
+  obj <- eigen(C)
+
+  # comment 2 : 
+  U <- obj$vectors
+  lambda <- obj$values
+```
+
+* Créer une matrice diagonale, $\Lambda$, dont les valeurs propres de $C$ sont les éléments diagonaux. Verifier que $UU^T = I$ et $C = U \Lambda U^$T. Compléter le code suivant
+
+
+```{r}
+  Lambda <- diag(lambda)
+
+  # le produit de matrice AB s'écrit A %*% B
+  # La transposée de la matrice A s'écrit t(A)
+
+  U%*%t(U)
+  U%*%Lambda%*%t(U)
+  
+```
+
+
+
+
+* Calculer la matrice $C^{-1}$ et vérifier que $C^{-1} = U \Lambda^{-1} U^T$. Compléter le code suivant.
+
+```{r}
+  help(solve)
+
+  Ci=solve(C,identity(C))
+
+  # le produit de matrice AB s'écrit A %*% B
+  # La transposée de la matrice A s'écrit t(A)
+
+  C%*%Ci
+```
+
+
+
+
+#### Exercice 3 : Distance de mahalanobis (45 minutes)
+
+Soit $C$ une matrice symétrique dont les valeurs propres sont positives. Soit ${\bf m}$ un vecteur arbitraire dans le plan $\mathbb{R}^2$. On définit la distance de mahalanobis entre un vecteur ${\bf x}$ et le vecteur ${\bf m}$ de la manière suivante
+
+$$
+d_C({\bf x}, {\bf m}) = \sqrt{({\bf x} - {\bf m} )^T C^{-1} ({\bf x} - {\bf m} )} \, .
+$$
+
+
+ 
+##### Valeur moyenne de la distance de mahalanobis au carré. 
+
+
+Soit ${\bf C}$ une matrice symétrique ayant des valeurs propres strictement positives (matrice de covariance). On considère la décomposition spectrale de cette matrice, ${\bf C} = {\bf U} {\bf \Lambda} {\bf U^T}$, où ${\bf U}$ est une matrice unitaire et ${\bf \Lambda}$ est une matrice diagonale à terme positifs.  
+
+**Résultat provisoirement admis :** On suppose que ${\bf x_0}$ est un vecteur aléatoire de moyenne ${\bf m} = 0$ et de matrice de covariance ${\bf C}$ (la matrice de covariance généralise la notion de variance).
+
+On admet que la valeur moyenne de la distance de mahalanobis au carré entre ${\bf x_0}$ et l'origine est égale à
+
+$$
+\mathbb{E}[d_C^2({\bf x_0}, {\bf m = 0})] = \mathbb{E}[ {\bf x_0}^T C^{-1} {\bf x_0}] = 2.
+$$
+
+Nous souhaitons vérifier le résultat précédent en simulant 10000 échantillons d'un [vecteur gaussien](https://en.wikipedia.org/wiki/Multivariate_normal_distribution) de moyenne nulle et de matrice de covariance $C$ définie par 
+
+```{r}
+C <- matrix(c(5, -1, -1, 1), nrow  = 2)
+C
+```
+
+* Effectuer 10000 tirages aléatoires d'un tel vecteur gaussien à l'aide la fonction `mvrnorm` de la bibliothèque `MASS`. Compléter le code suivant.
+
+
+```{r}
+  library(MASS)
+  help(mvrnorm)
+
+  # comment 1
+  x0 <- mvrnorm(10000, mu = c(0,0), Sigma = C)
+  head(x0)
+  plot(x0, col = "grey", pch = 19, cex = .3)
+```
+
+
+
+*  Calculer la matrice de covariance empirique des vecteurs simulés ${\bf x_0}$. Vérifier que cette matrice est proche de la matrice $C$.
+
+
+```{r}
+  help(cov)
+  
+  # comment 
+  C_empirique <- cov(x0)
+  C_empirique
+```
+
+
+
+
+* Ecrire une fonction calculant le carré de la distance de mahalanobis entre un vecteur {\bf x} et le centre d'un ensemble de vecteurs, ${\bf X_0}$. Pour cela, on considère que le centre de l'ensemble de vecteurs ${\bf X_0}$ correspond à la moyenne (barycentre) de ces vecteurs. Par défaut, la matrice $C$ intervenant dans la distance sera la matrice de covariance empirique de ${\bf X_0}$. Commenter et compléter le code suivant. 
+
+
+```{r}
+d2_maha <- function(x, x0, C = cov(x0)){
+  # description : 
+  
+  # comment 1 : calcule le centre des vecteurs x0 
+  if (!is.matrix(x0)) {stop("x0 must be a matrix.\n")}
+  
+  m0 <- apply(x0, MARGIN = 2, FUN = mean)
+  
+  # comment 2
+  d2 <- t(x - m0) %*% solve(C) %*% (x - m0)
+  
+  return(d2)
+}
+```
+
+
+* Vérifier que la valeur du carré de la distance entre les vecteurs (3,2) et (0,0) pour la matrice {\bf C} définie précédemment est égale à 10.25.
+
+```{r}
+  C <- matrix(c(5, -1, -1, 1), nrow  = 2)
+  d2_maha(as.matrix(c(3,2)), as.matrix(c(0,0)), C)  
+```
+
+
+
+* Calculer la valeur moyenne du carré de la distance de mahalanobis entre chaque vecteur simulé dans l'objet `x0` et de centre de `x` (pour la matrice $C$). Compléter le code suivant
+
+
+```{r}
+  # On applique le calcul de la distance à toutes les lignes de x0
+  help(apply)
+
+  f <-  function(x) d2_maha(x, x0, C)
+
+  d2 <- apply(x0, MARGIN= 1, f)
+  
+  cat("La valeur moyenne est égale à : \n")
+  round(mean(d2), digits = 2)
+```
+
+
+##### Simulation d'un problème de classification 
+
+Dans cet exercice, on simule des observations en deux dimensions. Les observations appartiennent à deux catégories, numérotées 1 (couleur noire) et 2 (couleur rouge). 
+Nous disposons ainsi d'un ensemble d'apprentissage dont les classes sont connues. 
+
+
+Le but de l'exercice est de programmer puis d'évaluer une règle de décision permettant de classer automatiquement un vecteur dans l'une des deux catégories. Le classifieur assignera à un vecteur donné la classe dont le centre $m_1$ ou $m_2$ sera le plus proche de ce vecteur au sens de la distance de mahalanobis.
+
+On utilise une loi gaussienne pour simuler les données de chaque classe. Dans cette simulation, la classe 1 est centrée autour du point de coordonnées $(4,0)$ tandis que la classe 2 est centrée autour du point de coordonnées (0,4). Les matrices de covariance intra-classe sont distinctes et définies ci-dessous.
+
+
+```{r}
+  # taille de l'échantillon = 2*n
+  n <- 1000
+
+  # les classes sont de même effectif 
+  class <- rep(1:2, each = n)
+  table(class)
+
+  # matrice de covariance de la classe 1
+  C1 <- matrix(c(5, -1, -1, 1), nrow  = 2, byrow = T)
+  cat("Covariance class 1 \n")
+  C1
+
+  # matrice de covariance de la classe 2
+  C2 <- matrix(c(3, 1, 1, 2), nrow = 2, byrow = T)
+  cat("Covariance class 2 \n")
+  C2
+```
+
+* Commenter le code de simulation suivant
+
+
+```{r}
+  # comment 1
+  x1 <- MASS::mvrnorm(n, mu = c(4,0), C1)
+  x2 <- MASS::mvrnorm(n, mu = c(0,4), C2)
+  
+  # comment 2
+  x <- rbind(x1, x2)
+  
+  # comment 3
+  plot(x, col = class, cex = .4, pch = 19)
+  points(4, 0, pch =  3, col = "green", lwd = 3, cex = 4)
+  points(0, 4, pch =  3, col = "green", lwd = 3, cex = 4)
+```
+
+* Pour tout vecteur contenu dans l'objet `x`, calculer le carré de la distance de mahalanobis séparant ce vecteur au centre de la classe à laquelle il appartient. Compléter le code suivant.
+
+```{r}
+  # distances au centre m1
+  f1 <-  function(x) {
+    d2_maha(x, x1, C = cov(x1))
+  }
+  d1 <- remplace_moi
+  
+  # distances au centre m2  
+  f2 <-  function(x) {
+    d2_maha(x, x2, C = cov(x2))
+  }  
+  d2 <- replace_me
+```
+
+
+
+* On souhaite classer l'élément ${\bf x}_i$ dans la classe 1 si 
+
+$$
+d_{C_1}({\bf x}_i , m_1) < d_{C_2}({\bf x}_i , m_2)
+$$
+et dans la classe en 2 sinon. Compléter le code suivant. 
+
+```{r}
+  # distance aux classes 1 et 2
+  distance <-  cbind(d1,d2)
+
+  # comment 2
+  help(which.min)
+  predicted <- apply(remplace_moi, MARGIN = 1, replace_me)
+
+  # table de classification
+  table(class, predicted)
+```
+
+
+* Calculer le pourcentage d'observations qui ont été bien classées par cette procédure.
+
+```{r}
+cat("Accuracy =", mean( condition_logique ))
+```
+
+
+* Visualiser la frontière séparant les deux classes d'après la règle utilisée.
+
+
+```{r}
+  plot(x, pch = 19, cex = .3, col = "grey")
+  boo <- abs(d1 - d2) < quantile(abs(d1 - d2) , 0.02)
+  points(x[boo,], pch = 19, cex = .3, col = "red")
+```
+

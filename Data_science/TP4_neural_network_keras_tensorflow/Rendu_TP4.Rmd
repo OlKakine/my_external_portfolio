@@ -1,0 +1,416 @@
+---
+title: "Rendu Travaux Pratiques 4"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+** **
+
+#### Règles de rendu
+
+* Chaque TP donne lieu à un bref compte-rendu portant sur certaines questions posées dans l'énoncé du TPs.
+
+* Le compte-rendu doit être complété à partir du texte de l'énoncé. Les codes R doivent être inclus dans le texte du compte-rendu (menu **Insert**) et commentés avec précision. **Les commentaires compteront pour une part importante dans la note**.
+
+* Le compte-rendu doit être déposé **sur TEIDE à la fin de la séance de TP**. Les rendus en retard seront fortement pénalisés. Il est 
+
+* Le compte-rendu doit être déposé **sur TEIDE au format HTML uniquement**. Utiliser la fonction **Preview** ou **knitr** du menu de rstudio pour obtenir le document au format souhaité. **Les fichiers "source" (Rmd) ne seront pas acceptés par les correcteurs**.
+ 
+
+
+** **
+
+
+#### Exercice 1:  
+
+
+** **
+```{r}
+library(magrittr)
+```
+
+```{r}
+set.seed(seed = 10100101)
+
+# runif génere des points uniformément répartis entre -2 et 2
+  n <- 500 
+  x <- runif(n, -2, 2)
+
+# les valeurs 0 et 1 sont des valeurs logiques converties en couleurs
+  y <- x > -1  &  x < 1
+  color <- rep("blue", n)
+  color[y] <- "orange" 
+
+# affichage des classes
+  plot(x, y, pch = 19, cex = .3, col = color)
+```
+
+* Construire une fonction mathématique correspondant à un réseau ayant deux neurones cachés, permettant d'approcher la probabilité conditionnelle $p(y=1|x)$ de manière arbitrairement précise.
+
+```{r}
+# on créer la fonction sigmoïde qui permet de simuler un neurone
+  sigmoid <- function(x){
+    if (!is.numeric(x)) stop("x must be numeric.")
+    return( 1/(1+exp(-x)) )
+  }
+
+# on crée la fonction f qui permet d'approcher de facon arbitrairement précise (epsilon )la fonction unité sur [-1,1]
+# la fonction d'activation du réseau de neurone crée va tendre vers f, car c'est la classification optimale dans ce cas
+a=1
+  f <- function(x, epsilon = 0.05){ 
+    return(a*sigmoid((1-x)/epsilon) + a*sigmoid((x+1)/epsilon) - 1)
+  }
+```
+
+
+* Pour les données de l'exercice, vérifier le résultat en ajustant un réseau à deux neurones avec la bibliothèque `nnet`. Représenter graphiquement les valeurs prédites par le réseau de neurones et superposer la courbe de la fonction mathématique proposée.
+
+```{r}
+#  on entraine un réseau de deux neurones qui permet de classer des données dans "blue" ou "orange"
+  mod_nnet <- nnet::nnet(x, 
+                         color=="orange", 
+                         size = 2, 
+                         lin = TRUE,
+                         decay = 0.0001,
+                         trace = FALSE)
+  
+  # création échantillon de test et des prédictions de leur classe via le modèle nnet
+  x_test <- seq(-2, 2, length = 200)
+
+# on superpose les deux courbes: on observe que la fonction d'activation du réseau de neurone est très proche de f
+  plot(x_test, f(x_test,0.01), type = "l", lwd = 2, col = "orange")
+
+  pred_class <- predict(mod_nnet, matrix(x_test))
+  points(x_test, pred_class, type = "l", lwd = 2, col = 4)
+
+  legend(x= -2, y = 0.9, legend = c("f(x)", "nnet"), 
+       col = c("orange", "blue"), lty = 1, cex = .7)
+
+```
+
+
+*  Pour l'échantillon d'apprentissage, calculer l'erreur de classification du réseau de neurones à 2 neurones cachés ajusté à la question précédente.
+
+```{r}
+# on calcule le pourcentage d'erreur qu'effectue le réseau de neurones sur le training set
+  prob_class <- mod_nnet %>% predict()
+  cat("Erreur de classification :\n")
+  mean( y != (prob_class > 0.5) )
+```
+
+
+#### Exercice 2: 
+
+
+
+```{r}
+library(isd)
+library(keras)
+library(magrittr)
+
+## on simule des données train et test
+  x <- rhastib(n_train = 200,
+               n_test = 200,
+               n_subclass = 10,
+               sigma2 = 0.05)
+
+  plot(x$train, pch = 19, col = x$class_train)
+  plot(x$test, pch = 19, col = x$class_test)
+```
+
+* Visualiser un historique d'entrainement d'un réseau de neurones keras. On choisira 100 neurones par exemple. 
+
+```{r, include=FALSE}
+x_train <- x$train
+y_train <- x$class_train
+
+x_test <- x$test
+y_test <- x$class_test
+
+  ## on veut stocker les classes de manière catégorielle
+  y_train <- (y_train == "orange") %>% as.integer()  %>% to_categorical(2)
+  y_test <- (y_test == "orange") %>% as.integer()  %>% to_categorical(2)
+  
+  ## on crée un modèle keras séquentiel, avec certains paramètres (ici une couche dense de 100 neurones)
+  model <- keras_model_sequential() 
+
+  model %>% 
+    layer_dense(units = 100, activation = 'relu', input_shape = 2) %>% 
+    layer_dropout(rate = 0.1) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+  
+  ## on choisit ensuite le critère à optimiser ainsi que l'algorithme d'optimisation
+  
+  model %>% compile(
+  loss = 'categorical_crossentropy',
+  optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.001),
+  metrics = c('accuracy')
+  )
+  
+  ## on optimise alors le modèle, sur 20 époques et avec un batch_size de 2
+```
+
+```{r, include=FALSE}
+history <- model %>% fit(
+                    x_train, 
+                    y_train, 
+                    epochs = 20,
+                    batch_size = 2,
+                    validation_split = 0.1
+)
+```
+
+```{r}
+plot(history)
+```
+
+
+**Important :** Pour la lisibilité du rapport, on utilisera l'option de chunck *include = FALSE* pour l'entrainement du réseau de neurones.
+
+
+* Evaluer le modèle précédent en reportant les erreurs de classification et de perte log loss obtenues pour votre ensemble test.
+
+```{r}
+#on compare la classe prédite avec la vrai classe sur l'ensemble de test: c'est une matrice de confusion
+
+pred_class <- model %>% predict_classes(x_test)
+table(pred_class, y_test[,2])
+
+# on regarde aussi l'accuracy (qui est grande) et la log loss (qui est faible), on conclut que le modèle est performant
+model %>% evaluate(x_test, y_test)
+```
+
+
+* Visualiser la frontière prédite entre les deux classes orange et bleue pour votre ensemble test.
+
+```{r}
+## discretisation de l'ensemble d'étude 
+
+  x1_coord <- seq(min(x$train[,1]), max(x$train[,1]), length = 100)
+  x2_coord <- seq(min(x$train[,2]), max(x$train[,2]), length = 100)
+
+  matrice_test <- cbind(rep(x1_coord, length = 100), 
+                       rep(x2_coord, each = 100))
+  
+## on applique le modèle sur la matrice test, ce qui nous permet de visualiser comment le modèle classe les points
+## dans l'intervalle (rectangle) dans lequel les points d'entrainement sont compris
+
+  prob_class <- model %>% predict_proba(matrice_test)
+  prob_class <- prob_class[,2] %>% matrix(nrow = 100)
+  
+## on visualise donc le rectangle avec différents niveau de gris suivant la probabilité de classification
+## ainsi que les points du training test colorés dans la couleur de leur classe
+## ainsi que la droite limite calculée par le modèle qui permet de prendre la décision de classification
+
+  image(x1_coord, x2_coord, prob_class, col = grey.colors(10), main = "keras ANN")
+  contour(x1_coord, x2_coord, prob_class, levels = c(0.5), col = "yellow", lwd = 3, add = TRUE)
+  points(x$train, col = x$class_train)
+```
+
+
+
+#### Exercice 3:  Défi "MNIST 1-2-7" 
+
+**Important :** Pour la lisibilité du rapport, on utilisera l'option de chunck *include = FALSE* pour l'entrainement des réseaux de neurones.
+
+```{r}
+#on récupère les données minst
+mnist <- dataset_mnist()
+  x_train <- mnist$train$x
+  y_train <- mnist$train$y
+  x_test <- mnist$test$x
+  y_test <- mnist$test$y
+  
+# on ne garde que les données correspondant aux 1,2 ou 7
+
+  boo_tr <- y_train == 1 | y_train == 2 | y_train == 7
+  x_train <- mnist$train$x[boo_tr,,]
+  y_train <- mnist$train$y[boo_tr]
+
+  boo_te <- y_test == 1 | y_test == 2 | y_test == 7
+  x_test <- mnist$test$x[boo_te,,]
+  y_test <- mnist$test$y[boo_te]
+  
+# reshape
+  x_train <- array_reshape(x_train, c(nrow(x_train), 784))
+  x_test <- array_reshape(x_test, c(nrow(x_test), 784))
+
+# rescale
+  x_train <- x_train/255
+  x_test <- x_test/255
+  
+# on veut stocker les classes de manière catégorielle
+  y_train <- y_train %>% factor() %>% as.integer() %>% -1 %>% to_categorical(3)
+  y_test <-  y_test %>% factor() %>% as.integer() %>% -1 %>% to_categorical(3)
+
+```
+
+* Reporter dans un tableau 12x2, les valeurs des erreurs de classification et de logloss obtenues sur l'ensemble test pour 12 réseaux de neurones distincts dont on aura fait varier les paramètres (nombre de couches cachées : 1 à 3, nombre de neurones par couche cachée : 10 et 100, valeurs de dropout : 0.2 et 0.5)
+
+```{r}
+#on crée 3 fonctions qui permettent d'entrainer et d'appliquer un modèle suivant différent paramètres 
+#nb neurones et dropout. f1 contiendra 1 couche de neurone alors que f3 en a 3.
+f1 = function(nb_neurones, dropout){
+  model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = nb_neurones, activation = 'relu', input_shape = 784) %>% 
+    layer_dropout(rate = dropout) %>% 
+    layer_dense(units = 3, activation = 'softmax')
+  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy')
+)
+
+  history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 20, 
+                        batch_size = 128, 
+                        validation_split = 0.2
+)
+perf = model %>% evaluate(x_test, y_test)
+return(perf)
+}
+
+f2 = function(nb_neurones, dropout){
+  model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = nb_neurones, activation = 'relu', input_shape = 784) %>% 
+    layer_dropout(rate = dropout) %>% 
+    layer_dense(units = nb_neurones, activation = 'relu') %>%
+    layer_dropout(rate = dropout) %>%
+    layer_dense(units = 3, activation = 'softmax')
+  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy')
+)
+
+  history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 20, 
+                        batch_size = 128, 
+                        validation_split = 0.2
+)
+perf = model %>% evaluate(x_test, y_test)
+return(perf)
+}
+
+f3 = function(nb_neurones, dropout){
+  model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = nb_neurones, activation = 'relu', input_shape = 784) %>% 
+    layer_dropout(rate = dropout) %>% 
+    layer_dense(units = nb_neurones, activation = 'relu') %>%
+    layer_dropout(rate = dropout) %>%
+    layer_dense(units = nb_neurones, activation = 'relu') %>%
+    layer_dropout(rate = dropout) %>%
+    layer_dense(units = 3, activation = 'softmax')
+
+ 
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy')
+)
+
+  history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 20, 
+                        batch_size = 128, 
+                        validation_split = 0.2
+)
+perf = model %>% evaluate(x_test, y_test)
+return(perf)
+}
+```
+
+```{r, include = FALSE}
+# on met dans le tableau comparison les losses et accuracies de chaque modèle
+i=0
+losses=NULL
+accs=NULL
+names=NULL
+
+for( nb_neurones in c(10,100)){
+  for(dropout in c(2,5)){
+    t_dropout=dropout/10
+    
+    i=i+1
+    perf=f1(nb_neurones,t_dropout)
+    losses[i]=perf$loss
+    accs[i]=perf$acc
+    names[i]=paste(c("modele", 1, nb_neurones, dropout), collapse = "_")
+    
+    i=i+1
+    perf=f2(nb_neurones,t_dropout)
+    losses[i]=perf$loss
+    accs[i]=perf$acc
+    names[i]=paste(c("modele", 2, nb_neurones, dropout), collapse = "_")
+    
+    i=i+1
+    perf=f3(nb_neurones,t_dropout)
+    losses[i]=perf$loss
+    accs[i]=perf$acc
+    names[i]=paste(c("modele", 3, nb_neurones, dropout), collapse = "_")
+  }
+}
+comparison = data.frame(loss=losses,acc=accs, row.names=names)
+```
+
+
+* Quel modèle de prédiction vous parait être le meilleur ? 
+
+```{r}
+# on met dans le tableau comparison les losses et accuracies de chaque modèle
+comparison
+```
+
+Le modèle le plus performant est le modèle 1-100-2, qui contient donc une couche dense de 100 neurones avec un dropout de 0.2.
+
+* Pour ce modèle, quelles sont les erreurs de classification les plus fréquentes ? Quantifier ces erreurs.
+
+```{r, include = FALSE}
+#on réutilise le modèle 1-100-2
+nb_neurones=100
+dropout=0.2
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = nb_neurones, activation = 'relu', input_shape = 784) %>% 
+    layer_dropout(rate = dropout) %>% 
+    layer_dense(units = 3, activation = 'softmax')
+  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy')
+)
+
+  history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 20, 
+                        batch_size = 128, 
+                        validation_split = 0.2
+)
+  
+```
+
+```{r}
+# on compare la prédiction du modèle avec la vrai classe des données test, dans une matrice de confusion
+pred_class <- model %>% predict_classes(x_test)
+table(pred_class, mnist$test$y[boo_te])
+```
+En étudiant la table de confusion, on remarque que le facteur de confusion le plus fréquent est que le modèle confond les 7 et les 1 dans le plus grand nombre de cas.
+
+Cela est logique étant donné que le 7 et le 2 dont bien plus proche au niveau de la forme qu'avec le 1.
+
+A noter que les données de pred_class sont classées dans les catégories 0,1,2 qui sont en fait 1,2,7.
+
+

@@ -1,0 +1,526 @@
+---
+title: 'Séance de travaux pratiques 5 : Défi analyse d''opinion (IMDB)'
+output:
+  html_notebook: default
+  html_document: default
+---
+
+** **
+
+#### [Tutoriaux et introductions à R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) 
+
+* Livre en français de [Vincent Goulet](https://cran.r-project.org/doc/contrib/Goulet_introduction_programmation_R.pdf)
+
+* R pour les débutants [Emmanuel Paradis](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_fr.pdf)
+
+
+* Liste des [fonctions de base](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html).
+
+** **
+Ce TP sera réalisé en plus grande autonomie que les précédents et les codes seront moins guidés. La note attribuée au rendu de ce TP aura un poids plus important que celles concernant les TPs précédents. 
+
+Le rendu comportera en particulier
+
+- Un fichier intitulé "Rendu_TP5.html" correspond au document "Rendu_TP5.Rmd" complété et commenté. Ce fichier décrira le modèle de prédiction choisi pour le défi de classification. 
+
+- Un "objet" R sauvé sous forme compressée contenant le modèle choisi pour être évalué par l'enseignant sur l'ensemble test. Le fichier compressé devra être sauvé sous le format RDS ou hdf5. Son intitulé devra être personnalisé sous la forme "my_login_bestmodel.ext" ("ext" désigne une extension particulière, "hdf5" ou "rds", voir les exemples à la fin du TP).
+
+- Un script R, contenant une fonction permettant d'évaluer le modèle (voir les exemples à la fin du TP).
+ 
+ 
+** **
+
+L'objectif de cette séance de travaux pratiques est de répondre à un défi de classification portant sur l'analyse d'opinion à partir de documents textuels ("natural language processing"). 
+
+Les documents analysés sont des critiques de films écrites par des utilisateurs du site web "Internet Movie Data Base" (IMDB). À chaque critique est associée une note donnée par l'utilisateur du site. Seules les notes extrêmes ont été conservées et  converties en valeurs binaires représentant des opinions positives ou négatives envers le film.  
+
+La base de données comporte 50000 critiques de films. Chaque document est prétraité et représenté sous le format d'un _sac de mots_ ("bag of words") pour en faciliter l'analyse. Un sac de mots peut être vu comme une représentation des termes d'un document partir de leur fréquence d'occurrence.
+ 
+Dans cette séance de TP, nous téléchargerons un échantillon de la base de données et constituerons un sous-échantillon comportant 10000 documents annotés. Chaque document est associé à une évaluation traduisant une opinion positive (valeur 1) ou négative (valeur 0) des utilisateurs. 
+
+Le but de ce TP est de prédire le mieux possible l'opinion ou le _sentiment_ des utilisateurs à partir des fréquences d'occurrence de certains termes apparaissant dans les textes. Un échantillon de test comportant 5000 critiques indépendantes sera utilisé par l'enseignant pour évaluer la méthode sélectionnée dans le défi final.
+
+
+
+```{r}
+library(magrittr)
+library(keras)
+```
+
+#### Index des termes et sacs de mots.
+
+À chaque terme d'un texte (aussi appelé _document_) est associé une fréquence d'apparition globale dans la base de données IMDB. Les termes sont référencés dans un index à l'aide d'un nombre indiquant leur rang d'apparition dans la base de données. Dans l'index, les termes sont triés du plus fréquent au moins fréquent.
+
+L'index peut être consulté à partir de la bibliothèque `keras`, sous forme de liste dont les attributs sont les termes utilisés dans la base de données. Pour cela, on utlise la fonction `dataset_imdb_word_index()`. L'index est illustré ci-dessous. 
+
+Le numéro trouvé dans l'index correspond au rang d'un terme donné. Pour trouver le mot le plus fréquemment utilisé dans l'IMDB, on peut chercher le terme dont la valeur est égale au rang 1. L'index contient aussi quatres valeurs spéciales (start, pad, unknown, unused). 
+
+
+```{r}
+  index <- keras::dataset_imdb_word_index()
+  names(index[index == 21 ])
+```
+
+Sans surprise, le terme le plus fréquemment utilisé est l'article "the". Sa valeur dans l'index est donc égale à 1. 
+
+L'article "the" se retrouve à la position 85976 dans l'index. L'index n'est donc pas ordonné par la fréquence des termes, mais par une permutation arbitraire. Nous pouvons utiliser la fonction `order()` pour réordonner l'index et trouver les 10 termes les plus utilisés dans l'ensemble des critiques de films.
+
+```{r}
+  o <- as.numeric(index) %>% order()
+  index[o[1:10]] %>% names()
+```
+
+Nous voyons qu'il s'agit d'articles, de prépositions ou de termes non-informatifs, comme par exemple, des éléments extraits des balises html (br). Il sera peut-être préférable de filtrer les termes les plus utilisés. L'entrée 49 correspondant au terme "good", nous nous arrêtons juste avant et nous filtrons les 48 premières entrées. 
+
+Pour réduire le temps de calcul, nous conservons uniquement les 2000 termes les plus fréquents. Dans la suite, chaque document sera représenté par une suite de fréquences de termes représentés par les codes de l'index. Le jeu de données résultant de cette étape est nommé `ìmbd`.
+
+```{r}
+  imbd <- keras::dataset_imdb(path = "imdb.npz", 
+                              num_words = 2048, 
+                              skip_top = 48)
+```
+
+Les données enregistrées dans l'objet `imbd` se présentent sous la forme de listes de documents (train et test). On utilisera les "double-crochets" ou le symbole dollar pour accéder aux attributs de ces listes.
+
+```{r}
+  summary(imbd)
+```
+
+
+Par exemple le document numéro 13 dans l'ensemble d'apprentissage est lu de la manière suivante. 
+
+```{r}
+  document12 <- imbd$train$x[[12]]
+  document12
+```
+
+Nous voyons que le terme d'indice 2 est très fréquent. Après filtrage, il correspond en fait à la chaîne de caractères **UNK** signifiant unknown. Cette chaîne apparait car nous nous sommes restreint à un dictionnaire de 2000 mots. 
+
+Les fréquences des termes apparaissant dans le document 13 peuvent être données par la fonction `table()`. Cette fonction utilise l'ordre alphabétique pour représenter les comptages de chaque terme.  
+
+```{r}
+  table( sapply(document12[document12 > 3]-3 , FUN = function(x) names(index[index == x]) ))
+```
+
+Le document 13 contient les termes "liked", "love",  mais aussi "annoying" et "scary". Il est associé à une opinion négative (valeur 0). Cela se vérifie en affichant la variable $y$.
+
+ 
+```{r}
+  imbd$train$y[12]
+```
+
+Pour la suite, c'est à vous de jouer. Pour ne pas entrer dans les subtilités du traitement du langage et de du pre-processing avec keras, nous nous appuierons sur un codage simplifié des textes basé sur les fréquences des mots de l'index. 
+
+
+## Exercice : Défi "analyse de sentiments"
+
+#### Lecture des données
+
+* Ecrire une ligne de commande R permettant convertir le document 13 en un vecteur de longueur 2000, indiquant le nombre d'apparition de chacun des indices allant de 49 à 2048 dans ce document.  
+
+
+```{r}
+  # comment 1
+  help(sapply)
+  sapply(48:2047, FUN = function(x) sum(document12==x) )
+```
+
+
+
+* Constituer un jeu de données comportant 10000 documents choisis pour moitié dans l'ensemble "train" et pour moitié dans l'ensemble "test" de l'IMBD. Techniquement nous le constituerons en 20 étapes, pour limiter l'impact sur la mémoire. Commenter et exécuter le code suivant
+
+
+```{r}
+x_imbd <- NULL
+
+  for (i in 1:10){
+    
+    x_imbd_500 <- NULL
+    
+      for (j in (500*(i-1)+1):(500*i)){
+        
+        # comment 1
+        
+        doc_temp <- imbd$train$x[[j]]
+        x_imbd_500 <- rbind(x_imbd_500, 
+                         sapply(48:2047, 
+                                FUN = function(ind) sum(doc_temp == ind)))
+        
+        if (j%%500 == 0) print(j) # ca rassure
+    }
+    x_imbd <- rbind(x_imbd, x_imbd_500)
+  }
+
+ for (i in 1:10){
+   
+    x_imbd_500 <- NULL
+    
+      for (j in (500*(i-1)+1):(500*i)){
+        
+        # comment 2
+        
+        doc_temp <- imbd$test$x[[j]]
+        x_imbd_500 <- rbind(x_imbd_500, 
+                         sapply(48:2047, 
+                                FUN = function(ind) sum(doc_temp == ind)))
+        
+        if (j%%500 == 0) print(j) # ca rassure
+    }
+    x_imbd <- rbind(x_imbd, x_imbd_500)
+  }
+```
+
+* Que contient l'objet `x_imbd` ?
+
+Vecteur de 10k éléments, chaque élément étant un vecteur de taille 2k contenant la transformée vect des docs
+
+* Pour représenter les classes 0 et 1 en format matriciel, on peut utiliser la fonction `to_categoretical()` de `keras`. C'est plus simple.
+
+```{r}
+  y_imbd <- to_categorical(imbd$train$y[1:5000], 2)
+  y_imbd <- rbind(y_imbd, to_categorical(imbd$test$y[1:5000], 2))
+  dim(y_imbd)
+```
+
+Et voilà. On est en pleine forme et on dispose d'une base d'apprentissage comportant les fréquences d'apparition des mots de l'index pour 10000 documents (`x_train`) et les opinions des utilisateurs `y_train`. Le TP peut vraiment commencer.
+
+
+#### Etude d'association
+
+Le but d'une étude d'association est d'identifier les termes les plus associés aux opinions positives ou négatives des utilisateurs. Pour cela, nous evaluons la correlation au carré entre l'occurrence de chaque terme et l'opinion de l'utilisateur (présence d'un 1). Il se peut que certaines valeurs de corrélation ne soient pas calculables à cause d'un écart-type nul. Cela arrive pour la 2000e valeur. Nous l'écarterons donc (il en restera 1999). 
+
+* Calculer le coefficient de corrélation au carré entre les fréquences d'apparition des termes de l'index et opinion des utilsateurs (1999 valeurs).
+
+```{r}
+  # comment
+  x <- x_imbd[,-2000]
+  
+  # comment
+  y <- y_imbd[,2]
+  
+  # comment
+  r2 <- sapply(1:1999, FUN = function(ind) cor(x[,ind],y))^2
+```
+
+
+* Montrer les termes dont la valeur d'association $r^2$ est supérieure à trois pourcent (0.03), puis supérieure à 0.02, et à 0.005. _Note_ : Il faut effectuer un décalage de 45 indices dans l'index pour trouver le codage correct (et non 48 indices, car il y a des termes spéciaux).
+
+
+```{r}
+  # quelque chose à changer
+  index[o[ which(r2 > 0.02) + 44]] %>% names()
+```
+
+* Dans quelles proportions les termes de valeur d'association $r^2$ supérieure à 0.02 apparaissent-ils dans les documents ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre. 
+
+
+```{r}
+# Calculer la frequence des termes realisant la condition
+  freq <- x[, which(r2>0.02) ] %>% apply(2, mean) 
+
+# mots dans l'index et barplot
+  names(freq) <-  index[o[which(r2 > 0.02) + 44]] %>% names() 
+  barplot(sort(freq, decreasing = TRUE), col = "lightblue", las = 2)
+```
+
+
+
+* Dans quelles proportions les termes de valeur d'association $r^2$ supérieure à 0.02 apparaissent-ils dans les documents **à connotation positive** ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre.
+
+
+```{r}
+  # Calculer la frequence des termes realisant la condition
+  x_pos=x[y==1,]
+  freq_pos <- x_pos[, which(r2>0.02)] %>% apply(2, mean) 
+
+# mots dans l'index et barplot
+  names(freq_pos) <-  index[o[which(r2 > 0.02) + 44]] %>% names() 
+  barplot(sort(freq_pos, decreasing = TRUE), col = "lightblue", las = 2)
+```
+
+
+*  Dans quelles proportions les termes de valeur d'association $r^2$ supérieure à 0.02 apparaissent-ils dans les documents **à connotation négative** ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre.
+
+
+```{r}
+  x_neg=x[y==0,]
+  freq_neg <- x_neg[, which(r2>0.02)] %>% apply(2, mean) 
+
+# mots dans l'index et barplot
+  names(freq_neg) <-  index[o[which(r2 > 0.02) + 44]] %>% names() 
+  barplot(sort(freq_neg, decreasing = TRUE), col = "lightblue", las = 2)
+```
+
+
+* *Question subsidiaire*.  Dans quelles proportions les termes de valeur d'association $r = cor(x,y)$ supérieure à 0.1 (resp. inférieure à $-0.1$) apparaissent-ils dans les documents **à connotation positive** (resp. **négative**) ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre.
+
+#### Modèles d'apprentissage 
+
+
+* \`A l'aide des outils vus dans les séances précédentes, tels que _keras_, (_lda_, _nnet_, ou d'autres bibliothèques de programmes que vous pourriez trouver dans R), ajuster des modèles d'apprentissage aux données contenues dans le TP : **"x_imbd" et "y_imbd"**.
+
+```{r}
+set.seed(101010)
+n=7000
+x_train=x[1:n,]
+x_test=x[(n+1):10000,]
+y_train=y[1:n]
+y_test=y[(n+1):10000]
+```
+
+```{r}
+losses=vector()
+accs=vector()
+names=vector()
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 128, activation = 'relu') %>%
+    layer_dropout(rate = 0.3) %>%
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 20, 
+                        batch_size = 128,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[1]=eval$loss
+    accs[1]=eval$acc
+    names[1]="basique"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 20, 
+                        batch_size = 128,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[2]=eval$loss
+    accs[2]=eval$acc
+    names[2]="only 1 couche"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 1024,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[3]=eval$loss
+    accs[3]=eval$acc
+    names[3]="x2 epoch x10 batch_size"
+```
+
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[4]=eval$loss
+    accs[4]=eval$acc
+    names[4]="decay 0.3 + logcosh"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 512, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.2) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[5]=eval$loss
+    accs[5]=eval$acc
+    names[5]="*2 unit ∕2 dropout"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 1024, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.02) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3,rho = 0.8),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[6]=eval$loss
+    accs[6]=eval$acc
+    names[6]="rho=0.8 units*2 dropout/10"
+```
+
+* Dans un tableau, décrire les performances de 6 méthodes choisies pour des échantillons d'apprentissage et de test que vous aurez créés vous-mêmes **à partir de "x_imbd" et "y_imbd"**. Les performances seront mesurées par les erreurs de classification et d'entropie (log loss).
+
+```{r}
+data.frame(names,losses,accs)
+```
+
+
+* Sauver votre modèle dans un format compressé (RDS ou HDF5 pour `keras`). Remplacer la chaîne de caractère "my_login" par votre propre login ensimag. 
+
+```{r eval = FALSE}
+# standard r packages: 
+# saveRDS(model, file = "checchio_model.RDS")
+
+#keras
+  save_model_hdf5(object = model, filepath = "checchio_model_keras.hdf5")
+```
+
+
+
+* Ecrire et appliquer une fonction appelée "prediction_finale" pouvant prendre par défaut en entrée une matrice appelé "x_ultime" de taille 5000 lignes et 2000 colonnes contenant des valeurs binaires et une matrice "y_ultime" de taille 5000 lignes et 2 colonnes contenant des valeurs binaires. Cette fonction devra prédire les classes contenues dans "y_ultime" à partir des données "x_ultime" en chargeant le modèle que vous aurez choisi pour le défi. Des exemples de fonctions sont décrits  ci-dessous
+
+
+```{r, eval = FALSE}
+prediction_finale <- function(x_ultime, 
+                              y_ultime,
+                              file_path = "my_login_model_keras.hdf5"){
+  #Remplacer "my_login" par votre propre login ensimag. 
+  
+  require(magrittr) 
+  
+  #tests 
+  if (nrow(x_ultime) != 5000 | ncol(x_ultime) != 2000) 
+    stop("Dimensions de x incorrectes.")
+
+  if (nrow(y_ultime) != 5000 | ncol(y_ultime) != 2) 
+    stop("Dimensions de y incorrectes.")
+    
+  #if keras
+    require(keras) 
+
+    model <- load_model_hdf5(filepath = file_path)
+    model %>% evaluate(x_ultime, y_ultime)
+}
+```
+
+```{r eval = FALSE}
+ prediction_finale(x_test, y_test)
+```
+
+* *Note* :  pour d'autres modèles que ceux _keras()_, on sauvera l'objet correspondant au modèle ajusté avec la fonction _save()_ ou _saveRDS()_. On écrira une fonction permettant de charger l'objet créé (_load()_) et lui appliquant la fonction _predict()_ dans le format spécifique à la classe du modèle choisi (_knn_, _nnet_, _lda_, etc).
+
+Par exemple, si l'objet est de classe "nnet", on pourra s'inspirer des commandes suivantes pour sauver l'objet créé et écrire la fonction demandée.
+
+
+```{r, eval = FALSE}
+# Remplacer "my_login" par votre propre login ensimag. 
+# saveRDS(mod_nnet, file = "my_login_bestmodel.RDS")
+
+prediction_finale <- function(x_ultime, 
+                              y_ultime,
+                              file_path = "my_login_bestmodel.RDS"){
+  require(magrittr) 
+  #tests 
+  if (nrow(x_ultime) != 5000 | ncol(x_ultime) != 2000) 
+    stop("Dimensions de x incorrectes.")
+
+  if (nrow(y_ultime) != 5000 | ncol(y_ultime) != 2) 
+    stop("Dimensions de y incorrectes.")
+     
+  #if nnet
+    require(nnet) 
+    mod_nnet <- readRDS(file = file_path)
+    proba <- mod_nnet %>% predict(x_ultime)
+    acc <- mean(y_ultime[,1] == (proba < 0.5))
+    #logloss <- completer
+    return(list(acc = acc, log.loss = logloss))
+}
+```
+
+```{r eval = FALSE}
+x_test1 <- NULL
+ for (j in (1:5000)){
+        doc_temp <- imbd$train$x[[5000+j]]
+        x_test1<- rbind(x_test1, 
+                         sapply(49:2048, 
+                                FUN = function(ind) sum(doc_temp == ind)))
+ }
+ y_test1 <- to_categorical(imbd$train$y[5001:10000], 2)
+ prediction_finale(x_test1, y_test1)
+ 
+```

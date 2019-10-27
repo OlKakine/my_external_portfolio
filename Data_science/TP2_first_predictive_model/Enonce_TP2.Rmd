@@ -1,0 +1,447 @@
+---
+title: "Séance de travaux pratiques 2"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+** **
+
+#### [Introduction à R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) 
+
+* Livre en français de [Vincent Goulet](https://cran.r-project.org/doc/contrib/Goulet_introduction_programmation_R.pdf)
+
+* R pour les débutants [Emmanuel Paradis](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_fr.pdf)
+
+* Liste des [fonctions de base](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html).
+
+
+** **
+
+**IMPORTANT** : Cet énoncé est un document de travail interactif personnel **qui ne doit pas être rendu**. Le **compte-rendu de TP est un document séparé** et seul **le compte-rendu doit être déposé dans TEIDE en fin de séance** au format HTML. 
+
+Il est fortement conseillé **de préparer le TP** pour le réussir et pour **déposer le compte-rendu** dans de bonnes conditions. La préparation consiste à lire l'intégralité du TP, à en comprendre les principales étapes et celles nécessitant des recherches dans l'aide du programme. La préparation consiste aussi à lire le fichier de compte-rendu pour **identifier les réponses à rendre dans l'énoncé**.
+
+Le **rendu porte notamment sur les questions finales**. Il faut gérer son temps le mieux possible. La préparation et une bonne organisation pendant le TP sont essentielles. 
+
+
+
+** **
+
+#### Objectif
+
+L'objectif de cette séance de travaux pratiques est de se familiariser avec l'analyse d'un jeu de données et de construire ses premiers modèles prédictifs. Le TP s'appuie sur une version du [défi "titanic"](https://www.kaggle.com/c/titanic), dont le but est de prédire le plus précisement possible la survie d'un passager lors du naufrage du Titanic.
+
+Le [naufrage du RMS Titanic](https://fr.wikipedia.org/wiki/Titanic) est l'un des naufrages les plus dramatiques de l'histoire de la navigation. Le 15 avril 1912, lors de son voyage inaugural, le Titanic coule après avoir heurté un iceberg, tuant 1502 des 2224 passagers et membres d'équipage. Cette tragédie a choqué la communauté internationale et conduit à l'amélioration des règles de sécurité pour les navires.
+
+L'une des raisons du nombre de décès était qu'il n'y avait pas assez de canots de sauvetage pour les passagers et l'équipage. Certains groupes de personnes ont eu plus de chances de survivre que d'autres. Dans cette séance, nous analyserons les profils des personnes susceptibles de survivre au naufrage du Titanic. 
+
+Des données d'apprentissage (*train*) contiennent les profils et l'information de survie de 1037 passagers. Des données de test contiennent les profils de 272 autres passagers. Pour les données test, les informations de survie sont masquées. C'est à vous de les prédire.
+
+
+```{r}
+# Les données du TP se trouve dans le package isd
+# le package peut être installé depuis Github
+# install.packages("devtools")
+# devtools::install_github("bcm-uga/isd")
+library(isd)
+```
+
+
+On prendra soin de commenter les codes R tout au long des questions du TP. Il est demandé de compléter certains codes en utilisant l'aide en ligne du programme avec la commande `help()`. 
+
+**Tous les codes rendus devront être commentés et les commentaires compteront pour une par importante dans la note**.
+
+#### Exercice 1: 1H00
+
+* Lire les données de survie du naufrage du **Titanic**. Les données sont contenues dans le tableau de données `titanic_train`. Ce tableau contient des informations relatives à 1037 passagers, notamment la survie de ces passagers. Un ensemble test, dans lequel la destinée des passagers est inconnue, sera chargé plus loin.
+
+```{r}
+# help: data
+data("titanic_train")
+tit_train <- titanic_train  
+```
+
+Les données se présentent de la manière suivante
+```{r}
+# help: head, View 
+head(tit_train)
+```
+
+Chaque ligne représente un passager et neuf colonnes indiquent le profil du passager. Dans ce jeu de données, toutes les colonnes contiennent des variables binaires indiquant la réalisation des événements suivants :
+
+- survived : le passager a survécu
+- child : le passager était un enfant
+- adult : le passager était un adulte
+- elder : le passager était une personne agée
+- family : le passager voyageait avec ses enfants ou ses parents
+- gender : le passager était un homme
+- class1 : le passager voyageait en classe 1.
+- class2 : le passager voyageait en classe 2.
+- class3 : le passager voyageait en classe 3.
+
+* À partir de l'ensemble d'apprentissage, donner les probabilités de chacun des événements décrits dans la liste ci-dessus.  Arrondir les résultats à 2 décimales. 
+
+```{r}
+# help: apply, mean, round
+help(apply)
+prob <- apply(tit_train, MARGIN = 2, FUN = mean)
+
+round(prob, 2)
+```
+
+* Vérifier que l'on peut obtenir le résultat à l'aide du "pipe" de R, nécessitant la  bibliothèque `magrittr`. Cette instruction est similaire au **pipe** d'unix/linux. Elle transmet un objet à une fonction ou une expression. L'object est alors pris comme le premier argument de la fonction.
+
+```{r}
+# help: magrittr
+library(magrittr)
+tit_train %>% apply(MARGIN = 2, FUN = mean) %>% round(2)
+```
+
+
+
+* Calculer la probabilité de survie sachant que l'on était un homme (`gender == 1`) ou une femme (`gender == 0`).
+
+```{r}
+# help: list
+# help: cat
+cat("Probabilité de survie d'un homme :\n")
+mean(tit_train$survived[tit_train$gender==1]) 
+
+cat("Probabilité de survie d'une femme :\n")
+tit_train$survived[tit_train$gender != 1] %>% mean
+```
+
+
+
+
+* Vérifier votre résultat avec une représentation des données par un diagramme en barre (rien à compléter). 
+
+```{r}
+# help: factor
+# help: plot
+
+# c'est quand même plus court
+sex <- tit_train$gender
+
+# ah oui, femme et homme en anglais c'est comme ca.
+sex[tit_train$gender == 0] <- "female"
+sex[tit_train$gender == 1] <- "male"
+
+# factor est un type très utilisé lorsque les variables sont des catégories
+# la méthode d'affichage est adaptée aux objects de type "factor"
+plot(factor(sex), 
+     factor(tit_train$survived), 
+     col = c("black","orange"),
+     xlab = "Gender",
+     ylab = "Survival")
+```
+
+
+* Calculer la proportion d'hommes parmi les survivants.
+
+```{r}
+mean( tit_train$gender[tit_train$survived == 1])
+```
+
+
+
+* Calculer la probabilité de survie d'un individu sachant sa classe à bord (colonnes 7 à 9 dans le tableau de données).
+
+```{r}
+colonnes <- 7:9
+
+# Ecrire une fonction qui retourne la probabilité demandée pour la colonne j
+mean_class <- function(j) {
+    mean(tit_train$survived[tit_train[j]==1])
+  }
+
+# appliquer la fonction aux colonnes 7:9
+# help: sapply
+
+prob <- sapply(colonnes, mean_class)
+names(prob) <- names(tit_train[,7:9])
+prob
+```
+
+
+
+
+#### Exercice 2: 1H30
+
+Dans cet exercice, on construira des prédicteurs s'appuyant sur les probabilités empiriques de survie pour les profils de sexe et d'age. L'idée est très simple. Par exemple, pour prédire la survie d'une femme adulte ou agée, on calculera la probabilité conditionnelle de survie à partir de l'ensemble d'apprentissage (`tit_train`). Ces calculs de probabilités seront ensuite appliqués à l'ensemble test dans lequel l'information de survie n'est pas disponible.  
+
+* Calculer les probabilités de survie sachant les variables `gender` et `child` (4 cas).
+
+```{r}
+## attach permet d'utiliser directement les noms des variables d'un data.frame
+## par exemple, on peut utiliser 'gender' à la place de 'tit_train$gender'
+
+attach(tit_train)
+cat("femmme adulte ou agée :\n") 
+mean(survived[ !gender & !child ])
+cat("homme adulte ou agé :\n")
+mean(survived[ gender & !child ])
+cat("jeune fille :\n")
+mean(survived[ !gender & child ])
+cat("jeune garçon :\n")
+mean(survived[gender == 1 & child == 1])
+detach(tit_train)
+```
+
+
+
+
+* Calculer le nombre moyen de prédictions correctes effectuées sur l'ensemble d'apprentissage en considérant les probabilités de survie conditionnelle aux variables `gender` et `child`. Pour cela, on prédit qu'un individu *survit* lorsque la probabilité conditionnelle de survie est supérieure à 0.5.
+
+
+
+```{r}
+
+# help: for (i in 1:n){ body }
+  pred <- NULL
+  n <- nrow(tit_train)
+  
+# Commenter la boucle ligne par ligne  
+  for (i in 1:n){
+    #on récupère la ligne contenant les informations du passager correspondant à la ligne i
+    passenger <- tit_train[i,]  
+    
+    #on récupère les passagers du titanic présentant les mêmes caractéristiques (gender et age) que le passager choisi 
+    #ou plus précisément c'est un vecteur booléen qui indique si une ligne (un passager) possède les mêmes caractéristiques
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child 
+    
+    #on prédit donc pour le passager i un pourcentage de survie, qui correspond à la moyenne de survie des passagers possedant les mêmes caractères
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+  
+accuracy <- sum( tit_train$survived == (pred > 0.5) )/nrow(tit_train)
+cat("Accuracy: ", accuracy)
+  
+  if ( round(accuracy, 4) != 0.7821 ){
+  stop("Erreur : Essaie encore !")
+  }
+```
+
+
+
+
+
+* Représenter les résultats sous forme de [matrice de confusion](https://fr.wikipedia.org/wiki/Matrice_de_confusion) à l'aide de la fonction `table`.
+
+
+```{r}
+# help: table
+table(tit_train$survived, pred > 0.5 )
+```
+
+
+
+
+* On définit la perte **logloss** de la manière suivante 
+
+$$
+L = - \frac1n \sum_{i =1}^n y_i \log(p_i) + (1 - y_i) \log(1-p_i) \, , 
+$$
+
+où $y_i$ et  $p_i$ représentent l'indicateur de survie et la probabilité de survie de l'individu $i$. 
+
+* Quelle valeur de $L$ correspond à une prédiction au hasard ($p_i = 1/2$) ?
+
+```{r}
+# logloss quand p_i = 1/2
+L = 1
+  cat("On tire la survie à pile ou face.\n")
+  cat("logloss: ", L)
+```
+
+* Quelle valeur de $L$ correspond à une prédiction effectuée à partir de la probabilité globale de survie ? 
+
+```{r}
+#  logloss quand p est la probabilité globale de survie
+p = mean(tit_train$survived)
+L = round(-log(p,2),2)
+    cat("On tire la survie suivant la probabilité globale de survie.\n")
+    cat("logloss: ", L)
+```
+
+* Calculer la perte **logloss** associée aux prédictions stockées dans la variable `pred`. 
+
+```{r}
+y = tit_train$survived
+p = pred
+
+ L = -sum(sapply(1:length(y),FUN = function(i){y[i]*log(p[i])+(1-y[i])*log(1-p[i])}))/length(y)
+
+# test
+if ( round(L, 4) != 0.517 ){
+  stop("Erreur : Essaie encore!")
+}
+```
+ 
+
+
+
+* Calculer les probabilités de survie d'une femme en première et en troisième classe. Idem pour un homme.
+
+
+```{r}
+attach(tit_train)
+cat("Probabilité de survie d'une femme en classe 1 : ")
+mean(survived[ !gender & class1])
+cat("Probabilité de survie d'une femme en classe 3 : ")
+mean(survived[ !gender & class3 ])
+cat("Probabilité de survie d'une homme en classe 1 : ")
+mean( gender & class1 )
+cat("Probabilité de survie d'une homme en classe 3 : ")
+mean( gender & class3 )
+detach(tit_train)
+```
+
+
+
+
+* Prédire la survie de chaque passager à partir des fréquences de survie conditionnelle aux variables `gender`, `child`, `class3` (repartir d'un code précédent).
+
+
+```{r}
+
+# help: for (i in 1:n){ body }
+  pred <- NULL
+  n <- nrow(tit_train)
+  
+# Commenter la boucle ligne par ligne  
+  for (i in 1:n){
+    #on récupère la ligne contenant les informations du passager correspondant à la ligne i
+    passenger <- tit_train[i,]  
+    
+    #on récupère les passagers du titanic présentant les mêmes caractéristiques (gender,age et class) que le passager choisi 
+    #ou plus précisément c'est un vecteur booléen qui indique si une ligne (un passager) possède les mêmes caractéristiques
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child & tit_train$class3 == passenger$class3
+    
+    #on prédit donc pour le passager i un pourcentage de survie, qui correspond à la moyenne de survie des passagers possedant les mêmes caractères
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+  
+ # résumé des valeurs de prédiction  
+ summary(pred)
+```
+
+
+
+* Calculer la proportion de prédictions correctes effectuées et la perte logloss en considérant les fréquences de survies conditionnelles aux variables `gender`, `child`, `class3` (prédicteur fréquentiel).
+
+```{r}
+# accuracy
+
+  accuracy <- sum(tit_train$survived ==  (pred > 0.5)) /nrow(tit_train)
+  cat("Accuracy: ", accuracy,"\n")
+
+  # test
+  if ( round(accuracy, 4) != 0.7936 ){
+    stop("Erreur : Nan Nan Nan, c'est faux !")
+  }
+  
+# logloss
+  pred[pred == 1] <- 0.999999
+  L <- -sum(sapply(1:length(y),FUN = function(i){y[i]*log(pred[i])+(1-y[i])*log(1-pred[i])}))/length(y)
+  cat("logloss: ", L)
+```
+  
+
+  
+* Nous souhaitons comparer les prédictions effectuées à l'aide des fréquences empiriques à celles obtenues par des modèles de prédiction probabiliste plus sophistiqués. Pour cela, nous construisons un  modèle de réseau de neurones feed-forward, ayant 3 neurones cachés (considéré comme boîte noire dans ce TP). Il peut être intéressant de répéter l'opération d'ajustement plusieurs fois.
+
+
+```{r}
+# input : on enleve la variable de survie (premiere colonne)
+  x <- tit_train[,-1]
+
+# output : la variable survie
+  y <- tit_train[,1]
+  
+# On ajuste un réseau de neurones et on calcule les prédictions (probabilités) 
+# help : nnet::nnet  
+  mod <- nnet::nnet(x,  y, size = 3)
+  pred.nnet <- predict(mod)
+```
+
+
+* À l'aide du vecteur `pred_nnet`, calculer les nombres de prédictions correctes et incorrectes effectuées par le modèle neuronal que vous venez d'ajuster, ainsi que la proportion de bons classements (accuracy) et la perte logloss associée à ce modèle.
+
+```{r}
+# commenter
+  table(tit_train$survived, pred.nnet )
+
+# commenter le code 
+  accuracy <- sum(tit_train$survived == (pred.nnet > 0.5 ))/nrow(tit_train)
+  cat("Accuracy: ", accuracy,"\n")
+
+# commenter le code
+  pred.nnet[pred.nnet == 1] <- 0.99999999
+  L <- -sum(sapply(1:length(y),FUN = function(i){y[i]*log(pred.nnet[i])+(1-y[i])*log(1-pred.nnet[i])}))/length(y)
+  cat("logloss: ", L )
+```
+
+
+* Charger en mémoire le jeu de données test. Il contient un ensemble de passagers différent de l'ensemble d'apprentissage.
+
+```{r}
+data("titanic_test")
+tit_test <- titanic_test 
+head(tit_test)
+```
+
+* Pour l'ensemble de test, évaluer le prédicteur fréquentiel s'appuyant sur les caractéristiques `gender`, `child`, `class3`. La fonction `eval_titanic` a accès aux données de survie pour les passagers de l'ensemble de test et renvoie les valeurs moyennes du taux de classification et de la perte logloss. Compléter les commentaires.
+
+```{r}
+  pred <- NULL
+  n <- nrow(tit_test)
+  
+  for (i in 1:n){
+    #
+    passenger <- tit_test[i,]  
+    
+    #
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child  &  tit_train$class3 == passenger$class3 
+    
+    #
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+  
+  isd::eval_titanic(pred)
+```
+
+
+* Pour l'ensemble de test, évaluer les prédictions un prédicteur s'appuyant sur le modèle de réseau de neurones utilisant le profil complet d'un passager. Commenter le code suivant. 
+
+```{r}
+# commenter
+ #mod <- nnet::nnet(x,  y, size = 3)
+ pred_nnet <- predict(mod, tit_test)
+
+# commenter
+ isd::eval_titanic(pred_nnet)
+```
+
+
+* Comparer les résultats précédents aux valeurs obtenues pour l'ensemble d'apprentissage.  
+
+* Quelles prédictions vous semblent les meilleures ? Celles obtenues par les probabilités empiriques ou celles obtenues par le modèle neuronal ? Pour quels individus de l'ensemble test observe-t-on des différences de prédiction ? 
+
+
+
+**Remarque :** Il est possible d'utiliser l'opérateur "pipe" pour la prédiction
+
+
+```{r}
+#library(magrittr)
+mod %>% predict(tit_test) %>% isd::eval_titanic()
+```
+
+
+#### Exercice 3: 0H30
+
+Ouvrir et compléter le document de rendu et le soumettre sur le site de dépot TEIDE au format *html* (seul format accepté). Utiliser le bouton `Knit` pour la conversion en html. 
+
+

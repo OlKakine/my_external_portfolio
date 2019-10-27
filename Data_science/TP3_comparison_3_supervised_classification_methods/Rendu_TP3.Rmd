@@ -1,0 +1,399 @@
+---
+title: "Rendu Travaux Pratiques 3"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+** **
+
+#### Règles de rendu
+
+* Chaque TP donne lieu à un bref compte-rendu portant sur certaines questions posées dans l'énoncé du TPs.
+
+* Le compte-rendu doit être complété à partir du texte de l'énoncé. Les codes R doivent être inclus dans le texte du compte-rendu (menu **Insert**) et commentés avec précision. **Les commentaires compteront pour une part importante dans la note**.
+
+* Le compte-rendu doit être déposé **sur TEIDE à la fin de la séance de TP**. Les rendus en retard seront fortement pénalisés. 
+
+* Le compte-rendu doit être déposé **sur TEIDE au format HTML uniquement**. Utiliser la fonction **Preview** ou **knitr** du menu de rstudio pour obtenir le document au format souhaité. **Les fichiers "source" (Rmd) ne seront pas acceptés par les correcteurs**.
+
+
+** **
+
+```{r}
+library(isd)
+library(magrittr)
+```
+
+
+
+#### Exercice 1 :  Données simulées (knn)
+
+Dans cet exercice, on fixera la graine du générateur aléatoire pour la simulation du modèle de Hastie. 
+
+```{r}
+set.seed(seed = 2149)
+
+x <- isd::rhastib(n_train = 200,
+                    n_test = 200,
+                    n_subclass = 10,
+                    sigma2 = 0.05)
+```
+
+
+* Méthode `knn` : Pour $k = 1,\dots, 30$, calculer l'erreur de classification et la perte log loss à partir de l'ensemble test (on modifiera les probabilités 0 ou 1  pour éviter les valeurs "Inf"). Représenter ces résultats sous la forme de graphes "accuracy" et "logloss" en fonction de $k$.
+
+```{r}
+accuracy <- NULL
+log_loss <-  NULL
+
+for (k in 1:30){
+  
+  #on calcule une classification du test set, grâce à un modèle knn avec k voisins s'entrainant sur le train set
+  mod_knn <- class::knn(train = x$train, 
+                        test = x$test, 
+                        cl = x$class_train, 
+                        k = k, 
+                        prob = TRUE)
+  
+  #on met les classes prédites dans class_pred et les probabilités associées dans prob_class
+  class_pred <- mod_knn
+  prob_class <- attr(mod_knn,"prob")
+  
+  # les probabilités sont modifiées pour éviter Inf  
+  prob_class[prob_class == 1] <- 1 - 1e-09 
+  prob_class[prob_class == 0] <- 1e-09 
+  
+  # un vecteur logique montrant si la prédiction est juste
+  boo <- (class_pred == x$class_test)
+
+  #l'accuracy correspond à l'exactitude de la prédiction
+  accuracy[k] <- mean(class_pred == x$class_test)
+  
+  log_loss[k] <- - mean(boo*log(prob_class)) - mean((!boo)*log(1 - prob_class))
+}
+
+par(mfrow = c(1, 2)) # divise la fenetre en 1 ligne 2 colonnes
+plot(accuracy, col = "lightblue", type = "l", lwd = 3, xlab = "Nombre de voisins")
+plot(log_loss, col = "palegreen", type = "l", lwd = 3, xlab = "Nombre de voisins")
+```
+
+
+*  Quel choix de $k$ vous parait le plus pertinent pour la simulation effectuée ?
+
+On obtient une précision maximale ainsi qu'une log loss minimale aux alentours de 9 voisins. On prendra donc k=13 pour avoir un modèle optimal.
+
+
+#### Exercice 2 : Données simulées (lda)
+
+* Méthode `lda` : Calculer le taux de bonne classification et la perte log loss sur l'ensemble test. 
+```{r}
+require(MASS)
+help(lda)
+
+#on entraîne un modèle prédictif avec la méthode lda sur le train set
+    mod_lda <- MASS::lda(x = x$train, 
+                         grouping = x$class_train)
+
+#   on applique ce moède sur le test set et on récupère les prédictions
+    pred <- predict(mod_lda, newdata = x$test)
+    
+# Les  probabilités correspondent aux classes des variables testées     
+    prob_class <- pred$posterior
+    
+# on mesure la précision comme étant le pourcentage de bonne prédictions
+  accuracy <- mean(x$class_test == pred$class)
+  cat("Accuracy = ", accuracy, "\n")
+  
+# on calcule la log loss (perte d'information) associée à ce modèle
+  log_loss <- -mean( (x$class_test == "lightblue")*log(prob_class[,1]) + (x$class_test == "orange")*log(prob_class[,2]) )
+  cat("Logloss = ", log_loss, "\n")
+```
+
+
+#### Exercice 3 : Données simulées (nnet) 
+
+* Méthode `nnet` :  Pour `decay`$ = 0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1$, calculer le taux de bonne classification et la perte log loss sur l'ensemble test. Représenter ces résultats sous forme de tableau (accuracy/logloss en fonction de `decay`).
+
+```{r}
+require(nnet)
+
+accuracy <- NULL
+log_loss <-  NULL
+
+  decay <- c(0, 10^(-(6:0)))
+
+# On ajuste des modeles nnet pour 7 valeurs du paramètre decay
+# decay est un paramètre de régularisation  
+  
+  for (lambda in decay){
+    
+    # neural net 
+    mod_nnet <- nnet( x = x$train, 
+                      y = (x$class_test=="orange"), 
+                      size = 30,
+                      decay = lambda,
+                      maxit = 500,
+                      entropy = TRUE,
+                      trace = FALSE)
+    
+    # probabilité de prédiction en orange
+    prob_class <- predict(mod_nnet, newdata = data.frame(x$test))
+  
+    prob_class[prob_class > 1 - 1e-08]  <- 1 - 1e-08
+    prob_class[prob_class < 1e-08] <- 1e-08
+  
+    # on calcule l'accuracy, sachant qu'un vecteur est "orange" si sa probabilité calculée est supérieure à 0.5
+    accuracy <- c(accuracy, 
+                  mean((x$class_test=="orange") == (prob_class > 0.5)))
+  
+    # calul de la perte log loss
+    log_loss <- c( log_loss, 
+                - mean((x$class_test == "lightblue")*log(1 - prob_class)) - mean((x$class_test == "orange")*log(prob_class)) ) 
+  }
+  
+
+# on créer un tableau affichant l'accuracy et la logloss pour chaque valeur de decay
+  names(accuracy) <- as.character(decay)
+  names(log_loss) <- as.character(decay)
+  
+  data.frame(accuracy, log_loss)  %>% knitr::kable(digit = 2)
+```
+
+
+#### Exercice 4 : "Wisconsin Breast Cancer Database" 
+
+```{r}
+library(mlbench)
+data(BreastCancer)
+
+boo_na <- !apply(BreastCancer, 1, anyNA)
+breast_cancer <- BreastCancer[boo_na,-1]
+
+# on prend un échantillon aléatoire de 546 personnes 
+  cancer_samp <- sample(1:nrow(breast_cancer), 546)
+
+#que l'on utilise pour séparer en train et test sets
+  cancer_train <- breast_cancer[cancer_samp,]
+  cancer_test <- breast_cancer[-cancer_samp,]
+```
+
+
+* À l'aide de l'ensemble test, évaluer les taux de classification et de perte log loss pour les méthodes `lda`, `nnet` et `knn`. Pour `knn` et `nnet`, utiliser, dans un premier temps, les paramètres $k = 15$ et `decay`$=0.01$.
+
+```{r}
+# lda
+      mod_lda <- MASS::lda(cancer_train[,10] ~., data = cancer_train[,-10])
+
+      pred_lda <- predict(mod_lda, newdata = cancer_test[,-10])$class
+      
+      accuracy_lda <- mean(pred_lda == cancer_test$Class)
+      
+      prob_lda <- predict(mod_lda, newdata = cancer_test[,-10])$posterior
+      
+      prob_lda[prob_lda > 1 - 1e-08]  <- 1 - 1e-08
+      prob_lda[prob_lda < 1e-08] <- 1e-08
+      
+      log_loss_lda <- -mean((cancer_test$Class == "benign")*log(prob_lda[,1]) + mean((cancer_test$Class == "malignant")*log(prob_lda[,2]))) 
+      
+      accuracy_lda
+      log_loss_lda
+      
+# nnet
+      y <-  as.numeric(cancer_train$Class == "malignant")
+      
+      mod_nnet <- nnet::nnet(x = cancer_train[,-10], 
+                             y = y, 
+                             size = 30,
+                             entropy = TRUE, 
+                             decay = 0.01, 
+                             trace = FALSE)
+      
+      prob_nnet <- predict(mod_nnet, cancer_test[,-10])
+      prob_nnet[prob_nnet == 0] <- 1e-08
+      prob_nnet[prob_nnet == 1] <- 1 - 1e-08
+      
+      accuracy_nnet <- mean((prob_nnet>0.5) == (cancer_test$Class == "malignant"))
+
+      log_loss_nnet <- -mean((cancer_test$Class == "benign")*log(1 - prob_nnet) + (cancer_test$Class == "malignant")*log(prob_nnet)) 
+      
+      accuracy_nnet
+      log_loss_nnet
+
+# knn
+     mod_knn <- class::knn(cancer_train[,-10], 
+                            cancer_test[,-10], 
+                            cancer_train$Class, 
+                            k = 15, 
+                            prob = TRUE)
+
+      accuracy_knn <- mean(mod_knn == cancer_test$Class)
+      prob_class <- attr(mod_knn, "prob")
+      prob_class[prob_class == 1] <-  1 - 1e-08
+      
+      log_loss_knn <- - mean( (mod_knn == cancer_test$Class)*log(prob_class) + (mod_knn != cancer_test$Class)*log(1-prob_class) )
+      
+      accuracy_knn
+      log_loss_knn
+```
+
+
+* Reporter sous forme de tableau avec des valeurs arrondies les valeurs des taux de classification et de perte log loss obtenues pour les méthodes `knn`, `lda`, `nnet` (dans cet ordre).  Quel choix de prédicteur vous parait être le meilleur ? Justifier.
+
+```{r}
+  log_loss <-  c(log_loss_knn,log_loss_lda,log_loss_nnet)
+
+  names(log_loss) <-  c("knn", "lda", "nnet")
+  
+  barplot(log_loss, col = 2:4, ylab = "log loss")
+  
+  accuracy <- c(accuracy_knn,accuracy_lda,accuracy_nnet)
+  
+  names(accuracy) <-  c("knn", "lda", "nnet")
+  
+  barplot(accuracy, col = 2:4, ylab = "accuracy") 
+```
+
+```{r}
+data.frame(log_loss, accuracy) %>% round(2)
+```
+
+Deux modèles se démarquent, le knn et le nnet, car ils ont une log loss très faible et une bonne précision.
+
+* Pour `knn` et `nnet`, explorer les paramètres de "complexité" ($k$ et `decay`) conduisant aux meilleures performances. Reporter les performances des modèles correspondant dans un tableau.
+
+```{r}
+#nnet
+accuracy <- NULL
+log_loss <-  NULL
+
+  decay <- c(0.02*(1:5),0.2*(1:5))
+
+# On ajuste des modeles nnet pour 7 valeurs du paramètre decay
+# decay est un paramètre de régularisation  
+  
+  for (lambda in decay){
+    
+    y <-  as.numeric(cancer_train$Class == "malignant")
+      
+      mod_nnet <- nnet::nnet(x = cancer_train[,-10], 
+                             y = y, 
+                             size = 30,
+                             entropy = TRUE, 
+                             decay = lambda, 
+                             trace = FALSE)
+    
+    prob_nnet <- predict(mod_nnet, cancer_test[,-10])
+    prob_nnet[prob_nnet == 0] <- 1e-08
+    prob_nnet[prob_nnet == 1] <- 1 - 1e-08
+  
+    accuracy <- c(accuracy,mean((prob_nnet>0.5) == (cancer_test$Class == "malignant")))
+  
+    log_loss <- c(log_loss,-mean((cancer_test$Class == "benign")*log(1 - prob_nnet) + (cancer_test$Class == "malignant")*log(prob_nnet)))  
+  }
+  
+
+# on créer un tableau affichant l'accuracy et la logloss pour chaque valeur de decay
+  names(accuracy) <- as.character(decay)
+  names(log_loss) <- as.character(decay)
+  
+  data.frame(accuracy, log_loss)  %>% knitr::kable(digit = 2)
+```
+On remarque que le paramètre optimal semble être decay=1 .
+
+```{r}
+accuracy_knn <- NULL
+log_loss_knn <-  NULL
+
+# On ajuste des modeles knn pour 10 valeurs du paramètre neighbour
+# neighbour est un paramètre de régularisation  
+
+  neighbour=c(5+(1:10))
+  neighbour
+  for (k in neighbour){
+    
+    mod_knn <- class::knn(cancer_train[,-10], 
+                            cancer_test[,-10], 
+                            cancer_train$Class, 
+                            k = k, 
+                            prob = TRUE)
+    
+      accuracy_knn <- c(accuracy_knn, mean(mod_knn == cancer_test$Class))
+      prob_class <- attr(mod_knn, "prob")
+      prob_class[prob_class == 1] <-  1 - 1e-08
+      
+      log_loss_knn <- c(log_loss_knn,- mean( (mod_knn == cancer_test$Class)*log(prob_class) + (mod_knn != cancer_test$Class)*log(1-prob_class) ))
+  }
+  
+
+# on créer un tableau affichant l'accuracy et la logloss pour chaque valeur de neighbour
+  names(accuracy_knn) <- as.character(neighbour)
+  names(log_loss_knn) <- as.character(neighbour)
+  
+  data.frame(accuracy_knn, log_loss_knn)  %>% knitr::kable(digit = 2)
+```
+On remarque que le paramètre optimal semble être 11 neighbours.
+
+#### Défi "Wisconsin Breast Cancer Database" 
+
+```{r}
+rm(cancer_test)
+rm(cancer_train)
+data(cancer_train)
+data(cancer_test)
+```
+
+
+* Pour les méthodes `knn`, `lda`, `nnet`, calculer les probabilités de la classe "malignant" pour chaque élément de l'ensemble test. On choisira les paramètres `k` et `decay` donnant les meilleures performances possibles.
+
+```{r}
+#on prendra les valeurs k et decay trouvées précédemment
+
+# entrainement d'un modèle à paramétrer
+mod_knn <- class::knn(cancer_train[,-10], 
+                            cancer_test[,-10], 
+                            cancer_train$Class, 
+                            k = 11, 
+                            prob = TRUE)
+
+# proba de la classe "malignant" pour l'ensemble test 
+prob_knn <- attr(mod_knn, "prob")
+prob_knn[prob_knn == 1] <-  1 - 1e-08
+
+# entrainement d'un modèle à paramétrer
+y <-  as.numeric(cancer_train$Class == "malignant")
+mod_nnet <-  nnet::nnet(x = cancer_train[,-10], 
+                             y = y, 
+                             size = 30,
+                             entropy = TRUE, 
+                             decay = 1, 
+                             trace = FALSE)
+
+# proba de la classe "malignant" pour l'ensemble test 
+prob_nnet <- predict(mod_nnet, cancer_test) 
+
+mod_lda <- MASS::lda(cancer_train[,10] ~., data = cancer_train[,-10])
+      
+prob_lda <- predict(mod_lda, newdata = cancer_test[,-10])$posterior
+prob_lda[prob_lda > 1 - 1e-08]  <- 1 - 1e-08
+prob_lda[prob_lda < 1e-08] <- 1e-08
+```
+
+
+* Pour les méthodes `knn`, `lda`, `nnet`, appliquer  la fonction `eval_cancer` et présenter les résultat sous forme de tableau (`data.frame`).
+
+```{r}
+# accuracy et log loss sur l'ensemble test
+acc_knn = eval_cancer(prob_knn)$accuracy
+acc_nnet = eval_cancer(prob_nnet)$accuracy
+acc_lda = eval_cancer(prob_lda[,2])$accuracy
+loss_knn = eval_cancer(prob_knn)$log.loss
+loss_nnet = eval_cancer(prob_nnet)$log.loss
+loss_lda = eval_cancer(prob_lda[,2])$log.loss
+
+res=data.frame("knn"=c(acc_knn,loss_knn),"nnet"=c(acc_nnet,loss_nnet),"lda"=c(acc_lda,loss_lda),row.names = c("accuracy","log.loss"))
+res
+```
+On obtient un excellent résultat pour le réseau de neurone. 
+Le résultat du lda est acceptable.
+La méthode knn semble être incapable de prédire quoi que ce soit.

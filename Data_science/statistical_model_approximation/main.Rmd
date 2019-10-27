@@ -1,0 +1,598 @@
+---
+title: "Principes et M ́ethodes Statistiques TP 2019"
+author:
+- CHECCHIN Olivier
+- BEGUINET Hugo
+- TIOUR Zaineb
+output:
+  html_document: default
+  html_notebook: default
+  pdf_document: default
+header-includes:
+- \usepackage[brazil]{babel}
+- \usepackage{graphicx}
+- \usepackage[a4paper]{geometry}
+- \usepackage[vmargin=1in,hmargin=1in]{geometry}
+- \usepackage[utf8]{inputenc}
+- \usepackage{amsmath}
+- \usepackage{amsfonts}
+- \usepackage{amssymb}
+- \usepackage[width=19.00cm, height=28.00cm, left=1.50cm, right=1.00cm, top=1.00cm,
+  bottom=1.00cm]{geometry}
+- \usepackage{xcolor}
+- \everymath{\displaystyle}
+---
+
+
+
+# Analyse des defauts de cuves
+## Question 1:
+
+```{r}
+#Loading the data :
+
+cuves <- read.table("cuves.csv",sep=";",header=T)
+#help("read.table")
+#help(attach)
+attach(cuves)
+
+#Removing the NA data :
+cuves <- cuves[!is.na(cuves)]
+cuve1 <- cuve1[!is.na(cuve1)]
+cuve2 <- cuve2[!is.na(cuve2)]
+cuve3 <- cuve3[!is.na(cuve3)]
+```
+
+
+```{r}
+#Reading the data
+cuves
+#cuve1
+#cuve2
+#cuve3
+
+#Length of the data-vector :
+n<-length(cuves)
+n
+
+#Histogram of the data using the default setting of R
+par(mfcol=c(1,3))
+hist(cuve1)
+hist(cuve2)
+hist(cuve3)
+
+```
+
+
+```{r}
+
+# Histogramme classes de meme largeur :
+# La régle de Sturges donne k = 6 classes.
+k = 6
+vecteur_cuves <- list(cuve1, cuve2, cuve3)
+par(mfcol=c(1,3))
+for(i in seq(1,3)){
+  #Sorting the data
+  Sorted_data <- sort(vecteur_cuves[[i]])
+  Sorted_data
+  #Length of the data-vector :
+  n<-length(vecteur_cuves[[i]])
+  n
+  # Calcul des bornes inférieure et supérieure.
+  a0 <-Sorted_data[1]-0.025*(Sorted_data[n]-Sorted_data[1])
+  a6 <-Sorted_data[n]+0.025*(Sorted_data[n]-Sorted_data[1])
+  a0
+  a6
+  # Largeur des classes
+  h<-(a6-a0)/6
+  h
+  # Bornes des classes : on partage [a0,a6] en 6 intervalles
+  # de largeur h.
+  bornes <- seq(a0,a6,h)
+  bornes
+  hist(vecteur_cuves[[i]], probability = T, breaks = bornes)
+}
+
+
+```
+
+
+```{r}
+
+histoeff <- function(x, xlim=NULL, ...)
+{
+  sx <- sort(x)
+  n <- length(x)
+  k <- round(log(n)/log(2)+1)
+  rangex <- max(x)-min(x)
+  breaks <- c(min(x)-0.025*rangex, quantile(x, seq(1, k-1)/k), max(x)+0.025*rangex)
+  col <- 0
+  if (is.null(xlim)) xlim<-c(breaks[1], breaks[k+1])
+  hist(x, breaks=breaks, col=col, xlim=xlim, probability=T, ...)
+}
+
+#plotting the functions on the same window
+
+par(mfcol=c(1,3))
+for(i in seq(1,3)){
+histoeff(vecteur_cuves[[i]])
+}
+
+```
+
+```{r}
+#Ploting the emperical distribution function:
+par(mfcol=c(1,3))
+for(i in seq(1,3)){
+plot(ecdf(vecteur_cuves[[i]]))
+}
+
+```
+
+```{r}
+#Indicators :
+    #cuve 1 :
+    summary(vecteur_cuves[[1]])
+    var(vecteur_cuves[[1]])
+    
+    #cuve2
+    summary(vecteur_cuves[[2]])
+    var(vecteur_cuves[[2]])
+    
+    #cuve3
+    summary(vecteur_cuves[[3]])
+    var(vecteur_cuves[[3]])
+
+```
+
+Avec cette étude de statistique descriptive, il semble que les fissures des cuves 1 et 2 suivent 
+approximativement la meme loi qui nous est pour l'instant inconnue.
+Ce n'est pas le cas de la cuve 3 pour laquelle les fissures semblent suivre une loi complètement différente,
+plus proche de la loi normale.
+
+## Question 2: 
+
+
+Calculons la fonction de répartition de la loi $\mathbb{P}(a,2)$.
+
+Soit $x \in \mathbb{R}$.
+
+$\mathbb{F}(x)=\int_{-\infty}^{x} f(t) dt
+= \int_{-\infty}^{x} \dfrac{a \times 2^a}{2^{1+a}}  \times  1_{[2,+\infty[} (t) dt 
+=a \times 2^a \int_{2}^{x} \dfrac{1}{t^{1+a}} dt 
+= \dfrac{a \times 2^a}{-a} \left[ \dfrac{1}{t^a} \right]_{2}^{x} 
+= -2^a \left[ \dfrac{1}{x^a} - \dfrac{1}{2^a} \right]$.
+
+Donc $\mathbb{F}(x)=1-\left(\dfrac{2}{x} \right)^a$.
+
+Calculons l'espérance de la loi $\mathbb{P}(a,2)$ : 
+
+
+Soit $B \in \mathbb{R}^+$.
+
+
+\vspace{2cm}
+\begin{eqnarray*}
+\mathbb{E}(x) &=& \int_{-B}^{+B} tf(t) dt = 
+\int_{-B}^{+B} t \times \dfrac{a  \times  2^a}{2^{1+a}}  \times  1_{[2,+\infty[} (t) dt
+=a \times 2^a\int_{2}^{+B} \dfrac{1}{t^a} dt 
+= \dfrac{a \times 2^a}{1-a} \left[ \dfrac{1}{t^{a-1}} \right]_{2}^{+B} \\
+&=& \dfrac{2a}{1-a} \left( \dfrac{2}{B} \right)^{a-1} - \dfrac{2a}{1-a}.
+\end{eqnarray*}
+
+L'espérance sera finie si $a >1$.
+
+Calculons la variance de la loi $$\mathbb{P}(a,2)$$.\par
+
+\begin{eqnarray*}
+\mathbb{V}(x) &=& \int_{-B}^{+B} t^2f(t) dt = 
+\int_{-B}^{+B} t^2 \times \dfrac{a2^a}{2^{1+a}}  \times  1_{[2,+\infty[} (t) dt
+=a \times 2^a\int_{2}^{+B} \dfrac{1}{t^{a-1}} dt 
+= \dfrac{a \times 2^a}{2-a} \left[ \dfrac{1}{t^{a-2}} \right]_{2}^{+B} \\ 
+&=& \dfrac{4a}{2-a} \left( \dfrac{2}{B} \right)^{a-2} - \dfrac{4a}{2-a}.
+\end{eqnarray*}
+
+La variance sera finie si $a >2$.
+
+Conclusion : 
+
+\hspace{1cm}  pour $a >2$; on a ; \hspace{0.3cm} $$\mathbb{E}(x)= - \frac{2a}{1-a}$$ , \hspace{0.3cm} $$\mathbb{V}(x)= -\frac{4a}{2-a}$$ et $$\sigma(X) = \frac{2}{a-1} \sqrt{\frac{a}{a-2}}$$
+
+## Question 3:
+
+Pour trouver la loi de Y, on commence par calculer le fonction de repartition de loi de probabilité P(a,b) :
+
+On a : 
+$P(Y<y) = P(ln(\frac{X}{2})<y)$
+$P(Y<y) = P(X<2 \exp(y))$
+
+alors :
+$P(Y<y) = F(2 \exp(y))$
+
+Si $y < 2$, alors $F(y)=0$, et si $2 \exp(y) < 2$ càd $y <0$ alors $F(2 \exp(y))=0$ sinon on a $P(Y<y) =  1 - (\frac{1}{\exp(y)})^a = 1 - \exp(-ay)$
+
+Donc $Y$ suit une loi exponentielle de paramêtre $a$.
+
+## Question 4:
+Comme les observations sont indépendantes et de même loi on a d'après le théorème central limite:
+
+$$\sqrt{n} \frac{\bar{Y}_n - E(Y)}{\sigma(Y)} \to \mathcal{N}(0,1)$$
+Soit :
+
+$$Z_n = \sqrt{n}\left(a\bar{Y}_n - 1\right)\to \mathcal{N}(0,1)$$
+
+Maintenant qu'on a calculé notre fonction pivotale, il nous reste  à l'exploiter pour trouver l'intervalle de confiance.
+
+Par propriété de $Z_n$, on a:
+
+$$P(\left|{Z_n}\right| < u_\alpha) =P\left(\left|\sqrt{n}\left(a\bar{Y}_n - 1\right)\right| < u_\alpha\right)= 1-\alpha$$
+
+On doit donc résoudre l'inégalité suivante avec $T = \bar{Y}_n$:
+
+$$\left|\sqrt{n}\left(aT - 1\right)\right| < u_\alpha$$
+$$a^2 T^2  - 2aT + 1-\frac{u_\alpha^2}{n} \leq 0$$
+
+Ce polynôme en $a$ n'est négatif qu'entre ses racines, d'où l'intervalle de confiance est:
+
+$$\left[\frac{1-\frac{u_\alpha}{\sqrt{n}}}{T}; \frac{1+\frac{u_\alpha}{\sqrt{n}}}{T}\right]$$
+On peut trouver un autre intervalle de confiance utilisant 
+la fonction pivotale $$2*a*n*\bar{Y_n}$$ qui suit une loi du chi2(2*n).
+En obtient alors l'intervalle de confiance bilatéral au seuil alpha pour a:
+Icc= $$\left[\frac{z_{2n,\frac{alpha}{2}}}{2n\bar{Y_n}}; \frac{z_{2n,1-\frac{alpha}{2}}}{2n\bar{Y_n}}\right]$$
+
+
+## Question 5:
+
+1- On utilise tout d'abord la méthode graphique pour estimer la pertinance de la loi $P(a,2)$ .
+Pour vérifier si les données cuves suivent la loi $P(a,2)$ il suffit de vérifier si $Y = \ln(\frac{cuves}{2})$ suit la loi exponentielle de paramêtre $a$ (cf la question 3)
+
+```{r}
+n_1 <- length(vecteur_cuves[[1]])
+n_2 <- length(vecteur_cuves[[2]])
+n_3 <- length(vecteur_cuves[[3]])
+n <- min(c(n_1,n_2, n_3))
+par(mfcol=c(1,3))
+for (i in seq(1,3)){
+  cuve <- vecteur_cuves[[i]]
+  Y <- log(cuve/2)
+  # on vérifie Y suit la loi exponentielle
+  plot(sort(Y)[1:n],log(1-seq(1:n)/(n+1)))
+}
+
+
+```
+
+Le modèle de la loi exponentielle semble être vraissemblable pour les cuves 1 et 2 puisque les points sont approxmativement alignés. Alors que pour la cuve 3, le modéle logarithmique semble plus adéquat comme le montre le QQ-Plot suivant :
+
+```{r}
+qqnorm(cuve3)
+```
+
+
+2-  Estimation du pramêtre $a$ :
+
+Pour Y suivant une loi exp(a), on sait que l'EMM et l'EMV sont les mêmes.
+
+-Estimateur du maximum de vraisemblance (EMV) :
+
+Vu que $Y$ suit une loi exponentielle, on a $$\hat{a_n} = \frac{1}{\bar{Y_n}}$$
+ 
+```{r}
+hat_a1_n <- 1/mean(log(cuve1/2))
+hat_a1_n
+hat_a2_n <- 1/mean(log(cuve2/2))
+hat_a2_n
+hat_a3_n <- 1/mean(log(cuve3/2))
+hat_a3_n
+```
+
+-Qualité de l'estimateur :
+
+$$E[\frac{1}{\bar{Y_n}}] = a \frac{n}{n-1}$$
+On sait que l'EMV est asymptotiquement sans biais et efficace.
+Dans ce cas, il est biaisé. On considére donc $T_n = (n-1) \frac{1}{n \bar{Y_n}}$ comme notre nouvel estimateur sans biais
+On a alors notre meilleure estimation possible de a pour chaque cuve, même pour la 3 si l'on suppose que les fissures suivent une loi de Pa:
+
+```{r}
+T1_n=(n-1)*hat_a1_n/n
+T2_n=(n-1)*hat_a2_n/n
+T3_n=(n-1)*hat_a3_n/n
+```
+
+# Vérifications expérimentales à base de simulations :
+
+
+## Question 1: 
+
+On sait simuler des données selon la loi exponentielle.
+On généralise la relation mise en avant précedemment:
+Y=ln(X/b) suit une loi exp(a), pour a et b fixés.
+On peut donc réussir à simuler des données selon la loi Pa(a,b).
+
+```{r}
+b=2
+
+simu_echantillons_loi_exp=function(m,n,a){
+  #m echantillons avec chaque echantillon simulant une population de n individus suivant la loi exp(a)
+  echantillons_loi_exp=matrix(nrow = n, ncol=m)
+  for(i in 1:m){
+    donnees_loi_exp=rexp(n,rep(a,n))
+    echantillons_loi_exp[,i]=donnees_loi_exp
+  }
+  return(echantillons_loi_exp)
+}
+```
+
+
+## Question 2:
+On va donc vérififer que l'intervalle de confiance mis en évidence précédemment "fonctionne" pour les données simulées.
+On veut donc que dans environ 95% des cas, la vrai valeur a appartienne à l'intervalle de confiance au seuil 5%.
+```{r}
+#seuil
+alpha=5/100
+
+pourcentage_appartenance_icc=function(echantillons_loi_exp,alpha,a,n,m){
+  nb_appartenance=0
+  for(i in 1:m){
+    moy=mean(echantillons_loi_exp[,i])
+    
+    #bornes intervalle de confiance
+    a_icc=qchisq(alpha/2,2*n)/(2*n*moy)
+    b_icc=qchisq(1-alpha/2,2*n)/(2*n*moy)
+    
+    #booléen qui indique si le vrai parametre a appartient bien a l'icc
+    a_in_icc= a>a_icc && a<b_icc
+    
+    #on ajoute 1 si a_in_icc est vrai
+    nb_appartenance=nb_appartenance+a_in_icc
+  }
+  cat(nb_appartenance/m)
+}
+
+#on veut tester sur m echantillons de n individus, chacun suivant une loi exp(a)
+n=1000
+a=3
+m=1000
+
+#on simule donc les échantillons pour la loi exp(a), ce qui nous permet de les calculer pour la loi pa(a,b)
+echantillons_loi_exp=simu_echantillons_loi_exp(m,n,a)
+echantillons_loi_pa=b*exp(echantillons_loi_exp)
+
+#on utilise les données suivant la loi exp(a) pour faciliter les calculs des icc
+pourcentage_appartenance_icc(echantillons_loi_exp,alpha,a,n,m)
+
+```
+On vérifie bien que dans environ 95% des cas, la vrai valeur a appartient à l'intervalle de confiance.
+
+
+## Question 3:
+On veut comparer les performances des différents estimateurs.
+On en a deux:
+a_chapeau=1/moy(Yn) l'EMM et l'EMV qui est biaisé.
+a_chapeau_prime=(n-1)/(n*moy(Yn)) qui est non biaisé.
+```{r}
+#on veut tester sur m echantillons de n individus, chacun suivant une loi exp(a)
+n=100
+a=3
+m=1000
+
+#on simule donc les échantillons pour la loi exp(a)
+echantillons_loi_exp=simu_echantillons_loi_exp(m,n,a)
+
+#on calcule donc les différents estimateurs pour les m échantillons
+a_chapeau=NULL
+a_chapeau_prime=NULL
+for(i in 1:m){
+  a_chapeau[i]=1/mean(echantillons_loi_exp[,i])
+  a_chapeau_prime[i]=(n-1)/(n*mean(echantillons_loi_exp[,i]))
+}
+
+#on calcule alors les biais et erreurs quadratiques
+biais_a_chapeau=mean(a_chapeau)-a
+biais_a_chapeau_prime=mean(a_chapeau_prime)-a
+
+cat("biais a_chapeau:",biais_a_chapeau,"\n")
+cat("biais a_chapeau_prime:",biais_a_chapeau_prime,"\n")
+
+erreur_quadratique_a_chapeau=mean((a_chapeau-a)**2)
+erreur_quadratique_a_chapeau_prime=mean((a_chapeau_prime-a)**2)
+
+cat("erreur quadratique a_chapeau:",erreur_quadratique_a_chapeau,"\n")
+cat("erreur quadratique a_chapeau_prime:",erreur_quadratique_a_chapeau_prime,"\n")
+```
+On remarque que dans les deux cas, a_chapeau_prime est légèrement plus précis que a_chapeau. Plus n est grand, plus la différence entre les deux diminue et plus leur erreur quadratique est faible.
+
+On en conclut que, comme on pouvait l'imaginer, l'estimateur sans biais a_chapeau_prime est le plus performant des deux.
+
+
+## Question 4:
+On veut vérifier que l'estimateur a_chapeau converge bien faiblement vers la valeur réelle de a.
+```{r}
+#on va vérifier la convergence faible de a_chapeau, pour différents epsilons
+epsilons=c(0.1,0.01,0.005,0.001)
+ns=seq(10,100000,10000)
+a=3
+m=100
+
+#pour chaque epsilon et pour chaque n, on va donc regarder combien d'estimateurs sur m ont un écart avec a supérieur à epsilon
+for(epsilon in epsilons){
+  ecart_superieurs=NULL
+  for(n in ns){
+    ecart_superieur=0
+    echantillons_loi_exp=simu_echantillons_loi_exp(m,n,a)
+    a_chapeau=NULL
+    for(i in 1:m){
+      a_chapeau[i]=1/mean(echantillons_loi_exp[,i])
+      if(abs(a_chapeau[i]-a)>epsilon) 
+        ecart_superieur=ecart_superieur+1
+    }
+    ecart_superieurs=c(ecart_superieurs,ecart_superieur)
+  }
+  plot(ns,ecart_superieurs,main=c('epsilon=',epsilon))
+}
+
+```
+
+On voit que le nombre d'écarts supérieurs à epsilon converge vers 0 quand n grandit. Cependant si on prend epsilon=0.001, la probabilité que l'écart soit supérieur à epsilon est encore supérieure à 90% pour n=1000000.
+On en conclut que a_chapeau est faiblement convergent, mais qu'il converge lentement en probabilité.
+
+
+## Question 5:
+On veut vérifier que a_chapeau suit asymptotiquement(selon n) une loi normale.
+```{r}
+#on veut tester sur m echantillons de n individus, chacun suivant une loi exp(a)
+n=35
+a=3
+m=1000
+
+#on simule donc les échantillons pour la loi exp(a)
+echantillons_loi_exp=simu_echantillons_loi_exp(m,n,a)
+
+a_chapeau=NULL
+for(i in 1:m){
+  a_chapeau[i]=1/mean(echantillons_loi_exp[,i])
+}
+
+hist(a_chapeau)
+qqnorm(a_chapeau)
+```
+
+Plus n est petit (dans la dizaine) et plus on est relativement éloigné d'une répartition normale des estimateurs.
+Par contre dès que l'on fait grandir n (dans les centaines et plus), on obtient une répartition très rapidement proche d'une loi normale.
+
+On en conclut que les estimateurs suivent asymptotiquement une loi normale.
+
+
+# Partie 3
+
+## Question 1
+
+Le modèle de la loi $\mathcal{Pa}(\hat{a}_n', 2)$ est un modèle satisfaisant pour les deux cuves 1 et 2.
+
+Pour la cuve 3 : 
+
+```{r}
+histoeff(cuve3)
+```
+
+La forme en cloche de l'histogramme nous permet de choisir soit la loi normale ou la loi $\chi^2$ .
+
+```{r}
+par(mfcol=c(1,2))
+
+#loi normale
+qqnorm(cuve3, main="Loi normale")
+reg_lin_norm <- lm(sort(cuve3[1:n_3-1])~qnorm(seq(1:(n_3-1))/n_3))
+summary(reg_lin_norm)
+
+#loi du chi-2
+plot(sort(cuve3[1:n_3-1]),qchisq(seq(1:(n_3-1))/n_3, n_3-1),main="Loi du chi-2")
+reg_lin_norm <- lm(sort(cuve3[1:n_3-1])~qchisq(seq(1:(n_3-1))/n_3, n_3-1))
+summary(reg_lin_norm)
+
+```
+
+D'après les valeurs des paramétres de la regression linéaire, il semble plus probable que les fissures de la cuve 3 suivent une loi $\chi^2_{n-1}$.
+L'écart min/max ainsi que la médiane des résidus sont nettement plus faibles, et on remarque que $r$ est plus proche de $1$ sur le modèle en $\chi^2_{n-1}$ que sur le modéle de la loi normale.
+
+## Question 2
+
+### Partie -a- :
+
+Soit $X$ la variable modélisant la proportion des defauts des trois cuves. Pour une cuve donnée, et selon les propos du constructeur, on a -- $P(X > 5) < 0.05$ ou $P(X < 5) > 0.95$. Il semble donc légitime d'effectuer un test d'hypothèse unilatéral.
+
+On se place du point de vue du constructeur. 
+On pose donc l'hypothèse nulle: H0= "X est inférieur à 5" 
+  et l'hypothèse alternative: H1= "X est supérieur à 5"
+  
+D'après le constructeur, on peut choisir pour ce test un seuil alpha=0.05 .
+
+Pour les cuves 1 et 2, on réutilise la variable $Y = \ln{\frac{X}{2}}$. Le problème se transforme en :
+$$
+  P\left(Y < \ln{\frac{5}{2}}\right) > 0.95
+$$
+
+Soit $\a_0$ la valeur telle que :
+$$
+  P\left(Y_{a_0} < \ln{\frac{5}{2}}\right) = 0.95
+$$
+
+Alors :
+
+$$a_0 = -\frac{\ln{0.05}}{\ln{\frac{5}{2}}}$$.
+
+```{r}
+#Calcul de a_0
+a_0 = -log(0.05)/log(5/2)
+a_0
+```
+Si l'on se base sur les dires du constructeur, les defauts sont censé suivre une loi de paramètre a_0 (si l'on considère qu'elles suivent une loi Pa)
+
+On souhaite réaliser les tests suivants:
+$$
+\hat{a_1}_n' \leq a_0 $$ contre $$\hat{a_1}_n' \geq a_0 \\$$
+\hat{a_2}_n' \leq a_0 $$ contre $$\hat{a_2}_n' \geq a_0 \\$$
+$$
+
+On considére $\alpha$ tel que:
+$$
+\begin{aligned}
+  \alpha &= \underset{a \geq a_0}{\sup}P\left(\hat{a}_n' \leq l_\alpha\right) \\
+         &= \underset{a \geq a_0}{\sup}P\left(\sum Y_n \geq \frac{n-1}{l_\alpha}\right) \\
+         &= \underset{a \geq a_0}{\sup}P\left(2a \sum Y_n \geq \frac{2a(n-1)}{l_\alpha}\right) \\
+         &= \underset{a \geq a_0}{\sup} 1 - F_{\chi^2_{2n}}\left(\frac{2a(n-1)}{l_\alpha}\right) \\
+         &= 1 - F_{\chi^2_{2n}}\left(\frac{2a_0(n-1)}{l_\alpha}\right)
+\end{aligned}
+$$
+
+On a ainsi $$l_\alpha = \frac{2 a_0 (n-1)}{z_{2n, \alpha}}$$.
+
+On peut donc en déduire la $p$-valeur $\alpha_c$ de ce test:
+$$
+\begin{aligned}
+  \hat{a}_n' = \frac{2a_0(n-1)}{z_{2n,\alpha_c}} &\Leftrightarrow  z_{2n,\alpha_c} = \frac{2a_0(n-1)}{\hat{a}_n'} \\
+                                                 &\Leftrightarrow \alpha_c = 1 - F_{\chi^2_{2n}} \left(\frac{2a_0(n-1)}{\hat{a}_n'} \right)
+\end{aligned}
+$$
+
+```{r}
+
+#les estimateurs non biaisés des deux premiéres cuves :
+hat_a1_n_p = (n_1 - 1) * hat_a1_n / n_1
+hat_a2_n_p = (n_2 - 1) * hat_a2_n / n_2
+
+
+#Calcul de la p_valeur de la cuve 1
+pval_cuve_1 = 1 - pchisq((2*a_0*(n_1-1)) / hat_a1_n_p, 2*n_1)
+pval_cuve_1
+
+#Calcul de la p_valeur de la cuve 2
+pval_cuve_2 = 1 - pchisq((2*a_0*(n_2-1)) / hat_a2_n_p, 2*n_2)
+pval_cuve_2
+```
+
+Les $p$-valeurs pour la cuve 1 et la cuve 2 sont respectivement : 0.40 et 0.89 .
+On en conclut qu'il est alors très risqué de rejeter H0 dans les deux cas et d'autant plus pour la cuve 2. En effet, quelqu'un qui affirmera que H0 est fausse à cause des données de la cuve 2 aura plus de 89%  de chances de se tromper.
+
+Pour la troisième cuve, il suffit d'effectuer un test de Student sur $\sqrt(Y)$.
+```{r}
+t.test(sqrt(log(cuve3/2)), alterative="more", mu=sqrt(a_0))
+```
+
+Avec une p-valeur de 2.2e-16 , il est logique de douter de l'affirmation du constructeur. 
+Il est même très difficile de croire en H0. Pour ne pas rejeter H0, il faudrait vouloir une chance de se tromper inférieure à 2e-16.
+
+### Partie -b- :
+
+Le fonctionnement de la machine B nous oblige à effectuer un test de proportion pour les trois cuves :
+
+```{r}
+binom.test(length(cuve1[cuve1 > 5]), length(cuve1), p=0.05, alternative = "less")
+binom.test(length(cuve2[cuve2 > 5]), length(cuve2), p=0.05, alternative = "less")
+binom.test(length(cuve3[cuve3 > 5]), length(cuve3), p=0.05, alternative = "less")
+```
+
+On remarque que les p-valeurs des trois cuves sont respectivement : 0.81, 0.64, et 0.23.
+Cette fois ci, les résultats montrent que rien ne nous indique que les constructeur ment, et cela meme pour la cuve 3: on ne peut affirmer que H0 fausse pour la cuve 3 qu'en prenant un risque supérieur à 23% de se tromper.
+
+Avec seulement l'appareil B, on ne peut conclure qu'à la véracité de H0 si l'on ne veut pas prendre de risque inconsidéré.

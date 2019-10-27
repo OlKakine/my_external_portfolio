@@ -1,0 +1,390 @@
+---
+title: "Rendu Travaux Pratiques 5"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+** **
+
+#### Règles de rendu
+
+* Chaque TP donne lieu à un bref compte-rendu portant sur certaines questions posées dans l'énoncé du TPs.
+
+* Le compte-rendu doit être complété à partir du texte de l'énoncé. Les codes R doivent être inclus dans le texte du compte-rendu (menu **Insert**) et commentés avec précision. **Les commentaires compteront pour une part importante dans la note**.
+
+* Le compte-rendu doit être déposé **sur TEIDE à la date indiquée**. Les rendus en retard seront fortement pénalisés. 
+
+* Le compte-rendu doit être déposé **sur TEIDE au format HTML uniquement**. Utiliser la fonction **Preview** ou **knitr** du menu de rstudio pour obtenir le document au format souhaité. **Les fichiers "source" (Rmd) ne seront pas acceptés par les correcteurs**.
+
+Le dépot comportera en plus du fichier intitulé "Rendu_TP5.html" 
+
+- un "objet" R sauvé sous forme compressée contenant le modèle choisi pour être évalué par l'enseignant sur l'ensemble test. Le fichier compressé devra être sauvé sous le format RDS ou sous le format hdf5. Son intitulé devra être personnalisé sous la forme "my_login_bestmodel.RDS" ou "my_login_bestmodel.hdf5".
+
+- Un script R, contenant une fonction permettant d'évaluer le modèle.
+ 
+ 
+
+** **
+## Exercice : Défi analyse d'opinion (IMDB)
+
+#### Analyse d'association
+
+```{r}
+library(magrittr)
+library(keras)
+index <- keras::dataset_imdb_word_index()
+o <- as.numeric(index) %>% order()
+imbd <- keras::dataset_imdb(path = "imdb.npz", 
+                              num_words = 2048, 
+                              skip_top = 48)
+```
+
+```{r}
+x_imbd <- NULL
+
+  for (i in 1:10){
+    
+    x_imbd_500 <- NULL
+    
+      for (j in (500*(i-1)+1):(500*i)){
+        
+        # on récupère 500 par 500 les documents, que l'on transforme en des vecteurs de taille 2000
+        # contenant pour chaque indice le nombre d'apparition du mot correspondant dans le document
+        
+        doc_temp <- imbd$train$x[[j]]
+        x_imbd_500 <- rbind(x_imbd_500, 
+                         sapply(49:2048, 
+                                FUN = function(ind) sum(doc_temp == ind)))
+    }
+    x_imbd <- rbind(x_imbd, x_imbd_500)
+  }
+
+ for (i in 1:10){
+   
+    x_imbd_500 <- NULL
+    
+      for (j in (500*(i-1)+1):(500*i)){
+        
+        # on fait la même chose, mais en prenant des documents de imdb$test
+        
+        doc_temp <- imbd$test$x[[j]]
+        x_imbd_500 <- rbind(x_imbd_500, 
+                         sapply(49:2048, 
+                                FUN = function(ind) sum(doc_temp == ind)))
+    }
+    x_imbd <- rbind(x_imbd, x_imbd_500)
+ }
+ 
+ # on récupère les catégories correspondants aux documents
+ y_imbd <- to_categorical(imbd$train$y[1:5000], 2)
+ y_imbd <- rbind(y_imbd, to_categorical(imbd$test$y[1:5000], 2))
+```
+
+* Dans quelles proportions les termes de valeur d'association $r^2$ supérieure à 0.02 apparaissent-ils dans les documents ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre. 
+
+```{r}
+  # on enleve le mot d'indice 2000, qui peut poser des problèmes lors des calculs de corrélation
+  # x est donc un vecteur de 10000 éléments, chaque éléments étant un vecteur de taille 1999
+  x <- x_imbd[,-2000]
+  
+  # on récupère la catégorie de chaque document(1 si positif, 0 sinon)
+  y <- y_imbd[,2]
+  
+  # on calcule le coefficient de corrélation au carré pour chaque mot
+  r2 <- sapply(1:1999, FUN = function(ind) cor(x[,ind],y))^2
+```
+
+```{r}
+# Calculer la frequence des termes realisant la condition
+  freq <- x[, which(r2>0.02) ] %>% apply(2, mean) 
+
+# mots dans l'index et barplot
+  names(freq) <-  index[o[which(r2 > 0.02) + 45]] %>% names() 
+  barplot(sort(freq, decreasing = TRUE), col = "lightblue", las = 2)
+```
+
+* Dans quelles proportions les termes de valeur d'association $r^2$ supérieure à 0.02 apparaissent-ils dans les documents **à connotation positive** ? Représenter graphiquement ces proportions  à l'aide d'un diagramme en barre.
+
+```{r}
+  # Calculer la frequence des termes realisant la condition
+  x_pos=x[y==1,]
+  freq_pos <- x_pos[, which(r2>0.02)] %>% apply(2, mean) 
+
+# mots dans l'index et barplot
+  names(freq_pos) <-  index[o[which(r2 > 0.02) + 45]] %>% names() 
+  barplot(sort(freq_pos, decreasing = TRUE), col = "lightblue", las = 2)
+```
+
+#### Modèles de prédiction
+
+* \`A l'aide des outils vus dans les séances précédentes, tels que `keras`,  (_lda_, _nnet_, ou d'autres bibliothèques de programmes que vous pourriez trouver dans R), ajuster des modèles d'apprentissage aux données contenues dans le TP : `x_imbd` et `y_imbd`.
+
+```{r}
+set.seed(101010)
+n=7000
+x_train=x[1:n,]
+x_test=x[(n+1):10000,]
+y_train=y[1:n]
+y_test=y[(n+1):10000]
+```
+
+```{r}
+losses=vector()
+accs=vector()
+names=vector()
+```
+
+```{r, include=FALSE}
+# on crée un modèle keras avec un certains nombres de couches de neurones
+# suivant le nombre de neurones par couches et le droupout rate
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 128, activation = 'relu') %>%
+    layer_dropout(rate = 0.3) %>%
+    layer_dense(units = 2, activation = 'softmax')
+# on compile le modèle pour qu'il optimise sa prédiction suivant un optimiseur,
+# suivant les paramètres lr, decay ou rho
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+# on entraine ensuite le modèle sur des données train et test,
+# suivant les paramètres epoch et batch_size
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 20, 
+                        batch_size = 128,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[1]=eval$loss
+    accs[1]=eval$acc
+    names[1]="basique"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 20, 
+                        batch_size = 128,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[2]=eval$loss
+    accs[2]=eval$acc
+    names[2]="suppresion 1 couche"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 1024,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[3]=eval$loss
+    accs[3]=eval$acc
+    names[3]="epoch x2 batch_size x10"
+```
+
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[4]=eval$loss
+    accs[4]=eval$acc
+    names[4]="decay 0->0.3"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 512, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.2) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[5]=eval$loss
+    accs[5]=eval$acc
+    names[5]="unit *2 dropout /2"
+```
+
+```{r, include=FALSE}
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 1024, activation = 'relu', input_shape = 1999) %>% 
+    layer_dropout(rate = 0.02) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3,rho = 0.8),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        to_categorical(y_train), 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,to_categorical(y_test))
+)
+    eval=evaluate(model,x_test,to_categorical(y_test))
+    losses[6]=eval$loss
+    accs[6]=eval$acc
+    names[6]="rho=0.8 units*2 dropout/10"
+```
+
+
+* Dans un tableau, décrire les performances de 6 méthodes choisies pour des échantillons d'apprentissage et de test que vous aurez créés vous-mêmes à partir des objets `x_imbd` et `y_imbd`. Les performances seront mesurées par les erreurs de classification et d'entropie (perte log loss).
+
+```{r}
+data.frame(names,losses,accs)
+```
+
+* Donner le code R correspondant au meilleur modèle que vous avez ajusté (chunck ci-dessous). On considèrera la graine du générateur aléatoire comme un hyperparamètre supplémentaire du modèle. 
+
+```{r}
+# code de mon meilleur modèle
+# Ne pas oublier d'inclure la seed du générateur aléatoire 
+set.seed(101010)
+
+n=7000
+x_train=x_imbd[1:n,]
+x_test=x_imbd[(n+1):10000,]
+y_train=y_imbd[1:n,]
+y_test=y_imbd[(n+1):10000,]
+
+model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 1024, activation = 'relu', input_shape = 2000) %>% 
+    layer_dropout(rate = 0.02) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+ 
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.3,rho = 0.8),
+    metrics = c('accuracy'))
+  
+    history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 40, 
+                        batch_size = 512,
+                        validation_data=list(x_test,y_test)
+)
+```
+
+
+* Sauver votre meilleur modèle dans un format compressé (RDS ou HDF5 pour keras). Remplacer la chaîne de caractère "my_login" par votre propre login ensimag. 
+
+```{r eval = FALSE}
+# standard r packages: 
+#  saveRDS(model, file = "mylogin_model.RDS")
+
+#keras
+  save_model_hdf5(object = model, filepath = "checchio_model_keras.hdf5")
+```
+
+* Ecrire et appliquer une fonction appelée "prediction_finale" pouvant prendre par défaut en entrée une matrice appelée "x_ultime" de taille 5000 lignes et 2000 colonnes contenant des valeurs binaires et une matrice "y_ultime" de taille 5000 lignes et 2 colonnes contenant des valeurs binaires. Cette fonction devra prédire les classes contenues dans "y_ultime" à partir des données "x_ultime" en chargeant le modèle que vous aurez choisi pour le défi. Elle calculera les taux de classification et la perte log loss pour l'ensemble considéré. 
+
+**Exemple :**
+
+
+```{r, eval = FALSE}
+prediction_finale <- function(x_ultime, 
+                              y_ultime,
+                              file_path = "checchio_model_keras.hdf5"){
+  #Remplacer "my_login" par votre propre login ensimag. 
+  
+  require(magrittr) 
+  
+  #tests 
+  if (nrow(x_ultime) != 5000 | ncol(x_ultime) != 2000) 
+    stop("Dimensions de x incorrectes.")
+
+  if (nrow(y_ultime) != 5000 | ncol(y_ultime) != 2) 
+    stop("Dimensions de y incorrectes.")
+    
+  #if keras
+    require(keras) 
+
+    model <- load_model_hdf5(filepath = "checchio_model_keras.hdf5")
+    model %>% evaluate(x_ultime, y_ultime)
+}
+```
+
+
+
+```{r eval = FALSE}
+x_test2=x_imbd[5001:10000,]
+y_test2=y_imbd[5001:10000,]
+prediction_finale(x_test2, y_test2)
+```
+
+
+* Joindre un script R contenant la fonction `prediction_finale()` préalablement testée par vos soin.
+
+* Ne pas oublier la version htlm de ce compte rendu. Archiver et déposer l'ensemble dans TEIDE. 

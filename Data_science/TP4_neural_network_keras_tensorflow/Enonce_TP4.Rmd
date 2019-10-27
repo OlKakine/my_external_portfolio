@@ -1,0 +1,476 @@
+---
+title: "Séance de travaux pratiques 4"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+** **
+
+#### [Tutoriaux et introductions à R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf) 
+
+* Livre en français de [Vincent Goulet](https://cran.r-project.org/doc/contrib/Goulet_introduction_programmation_R.pdf)
+
+* R pour les débutants [Emmanuel Paradis](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_fr.pdf)
+
+
+* Liste des [fonctions de base](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html).
+
+
+** **
+
+
+**IMPORTANT** : Cet énoncé est un document de travail intéractif personnel **qui ne doit pas être rendu**. Le **compte-rendu de TP est un document séparé** et seul **le compte-rendu doit être déposé dans TEIDE en fin de séance** au format HTML. 
+
+Il est fortement conseillé **de préparer le TP** pour le réussir et pour **déposer le compte-rendu** dans de bonnes conditions. La préparation consiste à lire l'intégralité du TP, à en comprendre les principales étapes et celles nécessitant des recherches dans l'aide du programme. La préparation consiste aussi à lire le fichier de compte-rendu pour **identifier les réponses à rendre dans l'énoncé**.
+
+Le **rendu porte notamment sur les questions finales**. Il faut gérer son temps le mieux possible. La préparation et l'organisation pendant le TP sont essentielles. 
+
+** **
+
+#### Objectif
+
+L'objectif de cette séance de travaux pratiques est de se familiariser plus en profondeur avec les modèles de réseaux de neurones. Nous nous appuierons notamment sur le logiciel _keras_ permettant d'utiliser la bibliothèque de réseaux de neurones _tensorflow_, développée en particulier pour l'apprentissage profond.
+
+Dans la première partie, on créera un réseau de neurones (2 neurones) très simple pour un problème à deux classes. 
+
+Ensuite, le principal produit à délivrer sera une étude de performances concernant 12 modèles pour la classification automatique de chiffres manuscrits (reconnaître les chiffres manuscrits 1,2 ou 7). Quelle sera la meilleure approche pour cette tâche de classification ? 
+
+
+On prendra soin de commenter les codes R tout au long des questions du TP. Il est demandé de compléter certains codes en utilisant l'aide en ligne du programme avec la commande `help()`.
+
+**Tous les codes rendus devront être complets et commentés et les commentaires compteront pour une par importante dans la note**.
+
+**Attention : ** La question ayant le poids le plus important dans la note se trouve à la fin du TP (**Défi MNIST**). **Evitez de trop flaner en route...**
+
+
+```{r}
+#install.packages("devtools")
+#devtools::install_github("bcm-uga/isd")
+library(isd)
+library(magrittr)
+```
+
+
+#### Exercice 1 (40 minutes) : Pourquoi utiliser un réseau de neurones ?
+
+Dans cet exercice, nous donnons un exemple très simple de classification pour lequel les classes ne sont pas séparables par un seuil unique (séparation linéaire). Le problème nécessitera l'utilisation de plusieurs neurones.
+
+On considère un jeu de données unidimensionel dans lequel les variables $x \in (-2,2)$ sont associées à la classe 1 ("orange") lorsque $x$ se trouve dans l'intervalle $(-1,1)$ et à la classe 0 (bleue) sinon. 
+
+* Créer un échantillon d'apprentissage de taille $n =500$. Représenter la valeur de chaque classe en couleur bleue ou orange selon les valeurs de $x$ comprises entre -2 et 2. Commenter et completer le code suivant.
+
+
+```{r , fig.cap = "Echantillon d'apprentissage"}
+
+# help(runif) : comment 1
+  n <- 500 
+  x <- runif(n, -2, 2)
+
+# on crée un vecteur couleur de taille n remplit de "blue", puis on remplace les bons par "orange"
+  y <- abs(x)<1
+  color <- rep("blue", n)
+  color[y] <- "orange" 
+
+# affichage des classes
+  plot(x, y, pch = 19, cex = .3, col = color)
+```
+
+
+ 
+
+* Entrainer un réseau de neurones ayant un seul neurone caché. Evaluer l'erreur de classification sur l'ensemble d'apprentissage.  Commenter et compléter le code suivant. 
+
+```{r}
+## comment 1 : help(nnet::nnet)
+  mod_nnet <- nnet::nnet(x, 
+                         color == "orange", 
+                         size = 1, 
+                         trace = FALSE)
+
+  prob_class <- mod_nnet %>% predict()
+
+## calcule l'erreur de classification  
+  cat("Erreur de classification :\n")
+  mean(y != (prob_class > 0.5))
+```
+
+
+
+* Représenter graphiquement la fonction de prédiction du réseau de neurones ayant un seul neurone caché pour tout $x \in (-2,2)$.  Commenter et compléter le code suivant.
+
+```{r}
+# création échantillon de test et des prédictions de leur classe via le modèle nnet
+  x_test <- seq(-2, 2, length = 200)
+  pred_nnet <- x_test %>% as.matrix() %>% predict(mod_nnet,.)  
+    
+##
+  plot(x, y, pch = 19, cex = .3, col = "blue")
+  points(x_test, pred_nnet, type = "l", lwd = 2, lty = 3, col = "grey")
+```
+
+
+
+
+
+* Construire une fonction mathématique correspondant à un réseau ayant deux neurones cachés, permettant d'approcher la probabilité conditionnelle $p(y=1|x)$ de manière arbitrairement précise. On pourra utiliser un neurone de sortie à fonction de transfert linéaire plutôt que sigmoidale. Commenter et compléter le code suivant.
+
+
+```{r}
+# comment 1
+  sigmoid <- function(x){
+    if (!is.numeric(x)) stop("x must be numeric.")
+    return( 1/(1+exp(-x)) )
+  }
+
+# comment 2
+a=1
+  f <- function(x, epsilon = 0.05){ 
+    return(a*sigmoid((1-x)/epsilon) + a*sigmoid((x+1)/epsilon) - a)
+  }
+```
+
+
+
+
+* Vérifier le résultat en ajustant un réseau à deux neurones avec la fonction `nnet`. Représenter graphiquement les valeurs prédites par le réseau de neurones et superposer la courbe de la fonction mathématique proposée dans la question précédente. Commenter et compléter le code suivant.
+
+
+```{r}
+# A répéter éventuellement 
+  mod_nnet <- nnet::nnet(x, 
+                         color=="orange", 
+                         size = 2, 
+                         lin = TRUE,
+                         decay = 0.0001,
+                         trace = FALSE)
+  summary(mod_nnet)
+
+# comment 2  
+  plot(x_test, f(x_test,0.01), type = "l", lwd = 2, col = "orange")
+
+  pred_class <- predict(mod_nnet, matrix(x_test))
+  points(x_test, pred_class, type = "l", lwd = 2, col = 4)
+
+  legend(x= -2, y = 0.9, legend = c("f(x)", "nnet"), 
+       col = c("orange", "blue"), lty = 1, cex = .7)
+```
+
+
+
+* Pour l'échantillon d'apprentissage, calculer l'erreur de classification du réseau de neurones à 2 neurones cachés ajusté à la question précédente. Commenter et compléter le code suivant.
+
+```{r}
+# comment
+  prob_class <- mod_nnet %>% predict()
+  cat("Erreur de classification :\n")
+  mean( y != (prob_class > 0.5) )
+```
+
+
+
+
+
+#### Exercice 2 (20 minutes) : keras/tensorflow
+
+Cet exercice n'a pas d'autre prétention que de faire manipuler par l'exemple l'utilisation de la bibliothèque de programmes `keras`. Cette bibliothèque permet de définir des modèles de réseaux de neurones, de les ajuster aux données d'apprentissage et de les tester sur des ensembles choisis. L'exercice est donc un tutoriel dans lequel il suffit de suivre les instructions. Il a pour but de préparer la fin du TP (et la séance 5) où il s'agira de relever un défi d'apprentissage plus difficile. 
+
+Pour cela, il est nécessaire d'installer localement la bibliothèque de programmes **Tensorflow** développée par la compagnie Google. Cette installation locale dans votre répertoire de travail (*../.virtualenvs*) occupera une place conséquente (0.5G). Pensez à faire le ménage en fin de semestre !
+
+```{r}
+#install.packages("keras")
+library(keras)
+#install_keras()
+```
+
+Nous utilisons des données simulées à l'aide du générateur aléatoire `rhastib`.  Simuler 200 données d'apprentissage, 200 données de tests en utilisant 10 sous-classes et une la variance interne aux sous-classes fixée à $\sigma^2 = 0.05$. Visualiser les données colorées par leurs valeurs de classe. On commentera les codes proposés dans les espaces laissés pour les commentaires (dièses).
+
+
+```{r}
+## comment
+seed=10100101
+  x <- rhastib(n_train = 200,
+               n_test = 200,
+               n_subclass = 10,
+               sigma2 = 0.05)
+
+  plot(x$train, pch = 19, col = x$class_train)
+  plot(x$test, pch = 19, col = x$class_test)
+```
+
+* Renommer les variables d'apprentissage et de tests, ainsi que les classes correspondantes.
+
+```{r}
+x_train <- x$train
+y_train <- x$class_train
+
+x_test <- x$test
+y_test <- x$class_test
+```
+
+* Les données de classes, $y$, sont des vecteurs de chaines de caractères ("lightblue","orange"). Nous devons les convertir en matrices de présence/absence pour chacune des deux classes. Cela peut être fait de plusieurs manières, par exemple à l'aide de la fonction `to_categorical()` de `keras` :
+  
+```{r}
+library(keras)
+## comment
+  y_train <- (y_train == "orange") %>% as.integer()  %>% to_categorical(2)
+  y_test <- (y_test == "orange") %>% as.integer()  %>% to_categorical(2)
+
+  head(y_test)
+```
+
+* \`A la différence de la bibliothèque `nnet`, `keras` permet de séparer la construction d'un modèle de la phase d'optimisation des coefficients de ce modèle. La construction d'un modèle en couche successives peut être réalisée par la fonction `keras_model_sequential()`. La fonction  `keras_model_sequential()` est un exemple d'application de la programmation fonctionnelle, car il s'agit d'une fonction programmant une autre fonction.
+
+
+L'utilisation de la fonction _pipe_ de `magrittr` permet d'utiliser une syntaxe correspondant à la construction en couche du réseau de neurones. Les couches de neurones correspondent aux couches denses peuvent être spécifiées, ainsi que d'autres options comme le taux de chirurgie neuronale appliquée à une couche cachée (_dropout_). Pour débuter, construisons un modèle ayant une couche cachée (couche dense) de 100 neurones. 
+
+```{r}
+## comment
+  model <- keras_model_sequential() 
+
+  model %>% 
+    layer_dense(units = 100, activation = 'relu', input_shape = 2) %>% 
+    layer_dropout(rate = 0.1) %>% 
+    layer_dense(units = 2, activation = 'softmax')
+```
+
+
+La fonction _softmax_ est une généralisation de la fonction sigmoide. Avec deux classes, elle correspond exactement à la fonction sigmoide. Dans cet exemple, nous utilisons la fonction d'activation _relu_ qui fait partie du folkore des réseaux profonds. Dans la suite, nous pourrons revenir cette paramétrisation, faire varier l'architecture du réseau de neurones et explorer de nouvelles options. 
+
+* On choisit ensuite le critère à optimiser (`categorical_crossentropy` est un synonyme de _logloss_) et l'algorithme d'optimisation (variante de gradient stochastique, _RMSProp_) grâce à la fonction `compile()`.
+
+```{r}
+## comment
+
+model %>% compile(
+  loss = 'categorical_crossentropy',
+  optimizer = optimizer_rmsprop(lr = 0.001, decay = 0.001),
+  metrics = c('accuracy')
+  )
+```
+
+* L'entrainement se fait grâce à la fonction `fit()`. `batch_size` représente la taille de paquet de variables mises à jour dans une phase de l'algorithme de gradient stochastique et une époque (*epoch*) correspond à la mise à jour de toutes les variables. Dans notre cas, 20 époques correspondent exactement à vingt itérations de l'algorithme de gradient stochastique.
+
+```{r, include = FALSE}
+## comment
+
+history <- model %>% fit(
+                    x_train, 
+                    y_train, 
+                    epochs = 20,
+                    batch_size = 2,
+                    validation_split = 0.1
+)
+```
+
+
+* Les résultats d'entrainement peuvent être affichés. Comme dans d'autres TPs, nous avons choisi les critères _accuracy_ et _logloss_.  Pour afficher les résultats, on utilise la fonction `plot()` (`plot` est une fonction de la bibliothèque qui reconnait l'objet que l'on passe en argument. Elle utilise une méthode d'affichage adaptée à l'objet traité).
+
+```{r}
+  plot(history)
+```
+
+* Evaluer le modèle sur l'ensemble test. Pour cela, on utilise la fonction `evaluate()`.
+
+```{r}
+  model %>% evaluate(x_test, y_test)
+```
+
+* Donner un matrice de confusion pour les prédictions sur l'ensemble test.  Pour cela, on utilise la fonction `predict_classes()`.
+
+```{r}
+  pred_class <- model %>% predict_classes(x_test)
+  table(pred_class, y_test[,2])
+```
+
+
+* On peut aussi visualiser la frontière prédite entre les classes "orange" et "bleue". Pour cela, on utilise la fonction `predict_proba()`.
+
+```{r}
+## discretisation de l'ensemble d'étude 
+
+  x1_coord <- seq(min(x$train[,1]), max(x$train[,1]), length = 100)
+  x2_coord <- seq(min(x$train[,2]), max(x$train[,2]), length = 100)
+
+  matrice_test <- cbind(rep(x1_coord, length = 100), 
+                       rep(x2_coord, each = 100))
+  
+## comment 1
+
+  prob_class <- model %>% predict_proba(matrice_test)
+  prob_class <- prob_class[,2] %>% matrix(nrow = 100)
+  
+## comment 2  
+
+  image(x1_coord, x2_coord, prob_class, col = grey.colors(10), main = "keras ANN")
+  contour(x1_coord, x2_coord, prob_class, levels = c(0.5), col = "yellow", lwd = 3, add = TRUE)
+  points(x$train, col = x$class_train)
+```
+
+
+
+
+
+#### Exercice 3 (40 minutes) : Classification des caractères écrits à la main. 
+
+```{r}
+#install.packages("keras")
+library(keras)
+#install_keras(tensorflow = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.5.0-py2-none-any.whl")
+```
+
+**Attention : ** La question notée se trouve à la fin, ne pas trop flaner en route...
+
+
+Dans cet exercice, nous déterminerons les capacités des réseaux de neurones de la bibliothèque _tensorflow_ à correctement reconnaître des chiffres écrits à la main. La reconnaissance de l'écriture manuscrite est un problème difficile, et constitue un test pour les algorithmes d'apprentissage. Cet exemple est historique pour les réseaux de neurones et largement traité sur internet (il vous sera donc facile de savoir si vous faites bien).
+
+Les données de caractères manuscrits sont issues de la base  [MNIST](https://fr.wikipedia.org/wiki/Base_de_donn%C3%A9es_MNIST) (Modified National Institute of Standards and Technology). La base de données MNIST est une base de données de chiffres écrits à la main. Elle regroupe 60000 images de chiffres manuscrits et 10000 images de test. Ce sont des matrices carrées ayant 28 pixels de côté, dont les valeurs sont des niveaux de gris allant de 0 à 255.
+
+
+* Les données sont accessibles depuis la librairie `keras` qui les télécharge directement depuis l'url de dépot (il faut donc être connecté à internet pour réaliser le TP).  Chaque donnée est représentée par un tableau 3d (`array`) contenant les informations (images, width, height) en niveaux de gris. Pour coder le vecteur ${\bf x}$, nous aurons besoin de vectoriser ces données. Pour ne pas se limiter aux tutoriaux disponibles sur le web, nous nous intéressons à la reconnaissance des chiffres $1,2$ et 7. 
+
+Lire les données MNIST. Il y a 4 ensembles de variables. 
+```{r}
+  mnist <- dataset_mnist()
+  x_train <- mnist$train$x
+  y_train <- mnist$train$y
+  x_test <- mnist$test$x
+  y_test <- mnist$test$y
+```
+
+* Filtrer les données correspondant aux chiffres $1,2$ et 7. Commenter et compléter le code suivant.
+
+```{r}
+# comment 1
+
+  boo_tr <- y_train == 1 | y_train == 2 | y_train == 7
+  x_train <- mnist$train$x[boo_tr,,]
+  y_train <- mnist$train$y[boo_tr]
+
+# comment 2
+  boo_te <- y_test == 1 | y_test == 2 | y_test == 7
+  x_test <- mnist$test$x[boo_te,,]
+  y_test <- mnist$test$y[boo_te]
+```
+
+
+* Utiliser la fonction `image()` pour visualiser le premier chiffre test de la base de données réduite. C'est un 7. 
+
+```{r}
+  image(t(x_test[1, 28:1,]), col = grey.colors(5))
+```
+
+
+* Les images de dimension 28x28 doivent être converties en vecteurs de longueur 784 ($= 28 \times 28$). Cela peut se faire de plusieurs manières. En particulier, la fonction `array_reshape()` de keras est très utile pour cela.  
+
+
+```{r}
+# reshape
+  x_train <- array_reshape(x_train, c(nrow(x_train), 784))
+  x_test <- array_reshape(x_test, c(nrow(x_test), 784))
+```
+
+* Normaliser les données pour obtenir des valeurs réels (flottants) entre 0 et 1 en divisant les valeurs présentes par 255.  Utiliser la fonction `image()` pour visualiser le premier chiffre test de la base de données réduite dans cette nouvelle représentation. 
+
+
+```{r}
+# rescale
+  x_train <- x_train/255
+  x_test <- x_test/255
+  
+  dim(x_test)
+  x_test[1,] %>% matrix(nrow = 28) %>% .[,28:1] %>% image(col = grey.colors(5))
+```
+
+
+* Les données de classe sont des entiers 1,2,7. A l'aide de la fonction `to_categorical()`, convertir ces données en matrice d'absence/présence de chacun des 3 chiffres (3 colonnes). Il y a plusieurs méthodes équivalentes.
+  
+```{r}
+  y_train <- y_train %>% factor() %>% as.integer() %>% -1 %>% to_categorical(3)
+  y_test <-  y_test %>% factor() %>% as.integer() %>% -1 %>% to_categorical(3)
+  head(y_test)
+```
+
+
+
+* Construire successivement plusieurs réseaux de neurones multi-couches à l'aide de la fonction `keras_model_sequential()`, en faisant varier les paramètres des couches comme ci-dessous. On prendra soin de commenter et compléter le code suivant.  
+
+```{r}
+# commenter les lignes suivantes
+
+  model <- keras_model_sequential() 
+  model %>% 
+    layer_dense(units = 256, activation = 'relu', input_shape = 784) %>% 
+    layer_dropout(rate = 0.4) %>% 
+    layer_dense(units = 128, activation = 'relu') %>%
+    layer_dropout(rate = 0.3) %>%
+    layer_dense(units = 3, activation = 'softmax')
+
+# commenter les lignes suivantes  
+  model %>% compile(
+    loss = 'categorical_crossentropy',
+    optimizer = optimizer_rmsprop(lr = 0.001, decay = 0),
+    metrics = c('accuracy')
+)
+```
+
+
+* Hey ho, allons-y pour ajuster le réseau
+
+```{r, include = FALSE}
+  history <- model %>% fit(
+                        x_train, 
+                        y_train, 
+                        epochs = 20, 
+                        batch_size = 128, 
+                        validation_split = 0.2
+)
+```
+
+
+
+```{r}
+plot(history)
+```
+
+
+* Evaluer le modèle sur les données de test (erreur de classification et perte log loss)
+
+
+```{r}
+model %>% evaluate(x_test, y_test)
+```
+
+
+* Donner une matrice de confusion pour les classements effectués par le modèle sur le jeu test
+
+```{r}
+pred_class <- model %>% predict_classes(x_test)
+table(pred_class, mnist$test$y[boo_te])
+```
+
+
+
+
+
+#### Défi MNIST (40 minutes)
+
+Pour les données de l'exercice précédent, répondre aux questions suivantes.
+
+* Reporter dans un tableau 12x2 (`data.frame`), puis dans deux diagrammes en barres, les valeurs des erreurs de classification et de _logloss_ obtenues sur l'ensemble test pour 12 réseaux de neurones distincts dont on aura fait varier les paramètres de la manière suivante 
+  - nombre de couches cachées: 1 à 3, 
+  - nombre de neurones par couche cachée: 10 ou 100, 
+  - valeur de `dropout`: 0.2 ou 0.5.
+
+Inclure dans tableau une colonne indiquant le nom de chaque modele. Par exemple, un modèle à 2 couches cachées, 10 neurones par couche et une valeur "dropout" de 0.2 pourra s'appeler "modele_2_10_2"
+
+```{r}
+paste(c("modele", 2, 10, 2), collapse = "_")
+```
+
+
+
+* Quel modèle de prédiction vous parait être le meilleur ? 
+
+
+

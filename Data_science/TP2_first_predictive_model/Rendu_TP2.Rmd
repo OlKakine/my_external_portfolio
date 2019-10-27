@@ -1,0 +1,209 @@
+---
+title: "Rendu Travaux Pratiques 2"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+** **
+
+#### Règles de rendu
+
+* Chaque TP donne lieu à un bref compte-rendu portant sur certaines questions posées dans l'énoncé du TPs.
+
+* Le compte-rendu doit être complété à partir du texte de l'énoncé. Les codes R doivent être inclus dans le texte du compte-rendu (menu **Insert**) et commentés avec précision. **Les commentaires compteront pour une part importante dans la note**.
+
+* Le compte-rendu doit être déposé **sur TEIDE à la fin de la séance de TP**. Les rendus en retard seront fortement pénalisés. Il est 
+
+* Le compte-rendu doit être déposé **sur TEIDE au format HTML uniquement**. Utiliser la fonction **Preview** ou **knitr** du menu de rstudio pour obtenir le document au format souhaité. **Les fichiers "source" (Rmd) ne seront pas acceptés par les correcteurs**.
+
+
+** **
+
+
+#### Exercice 1:  
+
+*  À partir de l'ensemble d'apprentissage, donner les fréquences des variables contenues dans chacune des 9 colonnes du tableau de données `tit_train`.  Arrondir les résultats à 2 décimales
+
+```{r}
+library(isd)
+data("titanic_train")
+tit_train <- titanic_train  
+help(apply)
+prob <- apply(tit_train, MARGIN = 2, FUN = mean)
+
+round(prob, 2)
+```
+
+
+* Calculer la probabilité de survie d'un homme (`gender == 1`) ou une femme (`gender == 0`).
+
+```{r}
+library(magrittr)
+cat("Probabilité de survie d'un homme :\n")
+mean(tit_train$survived[tit_train$gender==1]) 
+
+cat("Probabilité de survie d'une femme :\n")
+tit_train$survived[!tit_train$gender==0] %>% mean
+```
+
+
+* Calculer la probabilité de survie d'un individu sachant sa classe à bord (colonnes 7 à 9 dans le tableau de données `tit_train`).
+
+```{r}
+colonnes <- 7:9
+
+# Ecrire une fonction qui retourne la probabilité demandée pour la colonne j
+mean_class <- function(j) {
+    mean(tit_train$survived[tit_train[j]==1])
+  }
+
+# appliquer la fonction aux colonnes 7:9
+# help: sapply
+
+prob <- sapply(colonnes, mean_class)
+names(prob) <- names(tit_train[,7:9])
+prob
+```
+
+
+#### Exercice 2: 
+
+* Calculer les probabilités de survie conditionnelles sachant les variables `gender` et `child` (4 cas).
+
+```{r}
+
+# help: for (i in 1:n){ body }
+  pred <- NULL
+  n <- nrow(tit_train)
+  
+# Commenter la boucle ligne par ligne  
+  for (i in 1:n){
+    #on récupère la ligne contenant les informations du passager correspondant à la ligne i
+    passenger <- tit_train[i,]  
+    
+    #on récupère les passagers du titanic présentant les mêmes caractéristiques (gender et age ou plus précisément si c'est un enfant ou non) que le passager choisi 
+    #ou plus précisément c'est un vecteur booléen qui indique si une ligne (un passager) possède les mêmes caractéristiques
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child 
+    
+    #on prédit donc pour le passager i un pourcentage de survie, qui correspond à la moyenne de survie des passagers possedant les mêmes caractères
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+  
+accuracy <- sum( tit_train$survived == (pred > 0.5) )/nrow(tit_train)
+cat("Accuracy: ", accuracy)
+  
+  if ( round(accuracy, 4) != 0.7821 ){
+  stop("Erreur : Essaie encore !")
+  }
+```
+
+* Calculer les nombres de prédictions correctes et incorrectes effectuées dans l'ensemble `tit_train` en considérant les fréquences de survie conditionnelles aux variables `gender` et `child`. Représenter les résultats sous forme de matrice de confusion.
+
+```{r}
+# 
+matrice_confusion = table(tit_train$survived, pred > 0.5 )
+colnames(matrice_confusion) <- c("Predicted 0","Predicted 1")
+rownames(matrice_confusion) <- c("Actual 0","Actual 1")
+matrice_confusion
+```
+
+* Calculer  les nombres de prédictions correctes et incorrectes effectuées dans l'ensemble `tit_train`, le taux de bons classement (accuracy) et la perte logloss en considérant les fréquences de survie conditionnelles aux variables `gender`, `child` et `class3`  (donner le script complet).
+
+```{r}
+  y=tit_train$survived
+  p = mean(tit_train$survived)
+  
+  pred <- NULL
+  n <- nrow(tit_train)
+  
+  for (i in 1:n){
+    #on récupère la ligne contenant les informations du passager correspondant à la ligne i
+    passenger <- tit_train[i,]  
+    
+    #on récupère les passagers du titanic présentant les mêmes caractéristiques (gender,age et class) que le passager choisi 
+    #ou plus précisément c'est un vecteur booléen qui indique si une ligne (un passager) possède les mêmes caractéristiques
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child & tit_train$class3 == passenger$class3
+    
+    #on prédit donc pour le passager i un pourcentage de survie, qui correspond à la moyenne de survie des passagers possedant les mêmes caractères
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+
+# accuracy
+
+  accuracy <- sum(tit_train$survived ==  (pred > 0.5)) /nrow(tit_train)
+  cat("Accuracy: ", accuracy,"\n")
+
+  # test
+  if ( round(accuracy, 4) != 0.7936 ){
+    stop("Erreur : Nan Nan Nan, c'est faux !")
+  }
+  
+# logloss
+  pred[pred == 1] <- 0.999999
+  L <- -sum(sapply(1:length(y),FUN = function(i){y[i]*log(pred[i])+(1-y[i])*log(1-pred[i])}))/length(y)
+  cat("logloss: ", L)
+```
+
+
+* Pour l'ensemble de test, évaluer les performances du prédicteur fréquentiel s'appuyant sur les caractéristiques `gender`, `child`, `class3` selon les critères *accuracy* et *log-loss*  (donner le script complet).
+
+```{r}
+data("titanic_test")
+tit_test <- titanic_test 
+  pred <- NULL
+  n <- nrow(tit_test)
+  
+  for (i in 1:n){
+    #on récupère la ligne contenant les informations du passager correspondant à la ligne i
+    passenger <- tit_test[i,]  
+    
+    #on récupère les passagers du titanic présentant les mêmes caractéristiques (gender,age et class) que le passager choisi 
+    #ou plus précisément c'est un vecteur booléen qui indique si une ligne (un passager) possède les mêmes caractéristiques
+    bool <- tit_train$gender == passenger$gender & tit_train$child == passenger$child  &  tit_train$class3 == passenger$class3 
+    
+    ##on prédit donc pour le passager i un pourcentage de survie, qui correspond à la moyenne de survie des passagers possedant les mêmes caractères
+    pred[i] <- mean(tit_train$survived[bool])
+  }
+  
+  isd::eval_titanic(pred)
+```
+
+
+* Pour l'ensemble de test, évaluer les predictions un prédicteur s'appuyant sur un modèle de réseau de neurones ayant 5 neurones cachés et utilisant le profil complet d'un passager  selon les critères *accuracy* et *log-loss*  (donner le script complet).
+
+```{r}
+# input : on enleve la variable de survie (premiere colonne)
+  x <- tit_train[,-1]
+
+# output : la variable survie
+  y <- tit_train[,1]
+
+# on entraine un modèle de 5 neurones, qui ayant des variables x essaye de prédire la variable y 
+# puis on met dans pred_nnet la prédiction faite par le modèle sur l'échantillon de test
+ mod <- nnet::nnet(x,  y, size = 5)
+ pred_nnet <- predict(mod, tit_test)
+
+# on évalue ensuite l'accuracy et la logloss des prédictions obtenues
+ isd::eval_titanic(pred_nnet)
+```
+
+
+* Quelles prédictions vous semblent les meilleures ? Celles obtenues par les probabilités empiriques ou celles obtenues par le modèle neuronal ? Justifier votre réponse. 
+
+On obtient des meilleures prédictions avec le réseaux de neurones. 
+On peut expliquer cela car d'une part on prend en compte toutes les variables, alors que dans l'approche empirique il manquait une précision sur l'âge et la classe (aggrégation de "adult" et "elder" ainsi que "class2" et "class2").
+D'autre part, l'approche empirique n'est pas assez performante du fait que la taille d'échantillon de train n'est pas suffisament plus grande que celle de l'échantillon de test.
+
+* Pour quels individus de l'ensemble test observe-t-on des différences de prédiction entre les approches empiriques et neuronales (donner le script complet) ? 
+
+```{r}
+#on affiche les passagers qui ont été prédit différemment par l'approche fréquentiste et le réseau de neurones
+tit_test[(pred>0.5 & pred_nnet <0.5) | (pred<0.5 & pred_nnet >0.5),]
+
+```
+On peut constater une tendance à avoir une erreur (donc une mauvaise prédictabilité) sur des femmes (souvent des enfants) en famille et en classe 3.
+
+
+
+
