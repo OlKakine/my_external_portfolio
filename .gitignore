@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+nbproject
+*_
+*.[oa]
+*~
+vhd/RAM_PROG_data.vhd
+.CEPcache
+*log
+*.class
+*#
