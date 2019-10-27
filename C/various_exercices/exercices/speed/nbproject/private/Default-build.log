@@ -1,0 +1,47 @@
+clang -o speed speed.c -g -std=gnu99 -Wall -Wextra -lrt
+speed.c:26:29: warning: unused parameter 'dst' [-Wunused-parameter]
+void copyordi2(struct ordi *dst, struct ordi src)
+                            ^
+speed.c:26:46: warning: unused parameter 'src' [-Wunused-parameter]
+void copyordi2(struct ordi *dst, struct ordi src)
+                                             ^
+speed.c:40:24: warning: unused parameter 'tab' [-Wunused-parameter]
+void fillzero2(double *tab, uint32_t length)
+                       ^
+speed.c:40:38: warning: unused parameter 'length' [-Wunused-parameter]
+void fillzero2(double *tab, uint32_t length)
+                                     ^
+speed.c:54:23: warning: unused parameter 'tab1' [-Wunused-parameter]
+void copytab2(double *tab1, double *tab2, uint32_t length)
+                      ^
+speed.c:54:37: warning: unused parameter 'tab2' [-Wunused-parameter]
+void copytab2(double *tab1, double *tab2, uint32_t length)
+                                    ^
+speed.c:54:52: warning: unused parameter 'length' [-Wunused-parameter]
+void copytab2(double *tab1, double *tab2, uint32_t length)
+                                                   ^
+speed.c:68:38: warning: unused parameter 'processus' [-Wunused-parameter]
+struct timespec print_duration(char *processus, struct timespec start, struct timespec end)
+                                     ^
+speed.c:68:65: warning: unused parameter 'start' [-Wunused-parameter]
+struct timespec print_duration(char *processus, struct timespec start, struct timespec end)
+                                                                ^
+speed.c:68:88: warning: unused parameter 'end' [-Wunused-parameter]
+struct timespec print_duration(char *processus, struct timespec start, struct timespec end)
+                                                                                       ^
+speed.c:78:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+speed.c:81:24: warning: unused parameter 'processus1' [-Wunused-parameter]
+void print_speed(char *processus1, char *processus2, struct timespec timer1, struct timespec timer2)
+                       ^
+speed.c:81:42: warning: unused parameter 'processus2' [-Wunused-parameter]
+void print_speed(char *processus1, char *processus2, struct timespec timer1, struct timespec timer2)
+                                         ^
+speed.c:81:70: warning: unused parameter 'timer1' [-Wunused-parameter]
+void print_speed(char *processus1, char *processus2, struct timespec timer1, struct timespec timer2)
+                                                                     ^
+speed.c:81:94: warning: unused parameter 'timer2' [-Wunused-parameter]
+void print_speed(char *processus1, char *processus2, struct timespec timer1, struct timespec timer2)
+                                                                                             ^
+15 warnings generated.

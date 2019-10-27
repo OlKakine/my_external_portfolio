@@ -1,0 +1,17 @@
+clang -std=c99 -Wall -Wextra -g    profiler.c   -o profiler
+profiler.c:42:20: warning: unused variable 'profil_masques' [-Wunused-variable]
+    const uint16_t profil_masques[SIZE] = {
+                   ^
+profiler.c:46:17: warning: unused variable 'profil_noms' [-Wunused-variable]
+    const char *profil_noms[SIZE] = {
+                ^
+profiler.c:54:14: warning: unused variable 'profil' [-Wunused-variable]
+    uint16_t profil;
+             ^
+profiler.c:38:14: warning: unused parameter 'argc' [-Wunused-parameter]
+int main(int argc, char **argv)
+             ^
+profiler.c:38:27: warning: unused parameter 'argv' [-Wunused-parameter]
+int main(int argc, char **argv)
+                          ^
+5 warnings generated.

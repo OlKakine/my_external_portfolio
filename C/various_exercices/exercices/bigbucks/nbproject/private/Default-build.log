@@ -1,0 +1,24 @@
+clang -std=c99 -Wall -Wextra -g   -c -o bigbucks.o bigbucks.c
+clang -std=c99 -Wall -Wextra -g   -c -o salarie.o salarie.c
+In file included from salarie.c:2:
+./salarie.h:26:26: error: unknown type name 'uint8_t'
+                         uint8_t age,
+                         ^
+./salarie.h:27:26: error: unknown type name 'uint8_t'
+                         uint8_t anciennete,
+                         ^
+./salarie.h:28:26: error: unknown type name 'uint32_t'
+                         uint32_t salaire);
+                         ^
+./salarie.h:34:27: error: unknown type name 'uint8_t'
+                          uint8_t age,
+                          ^
+./salarie.h:35:27: error: unknown type name 'uint8_t'
+                          uint8_t anciennete,
+                          ^
+./salarie.h:36:27: error: unknown type name 'uint32_t'
+                          uint32_t salaire);
+                          ^
+6 errors generated.
+<builtin>: recipe for target 'salarie.o' failed
+make: *** [salarie.o] Error 1

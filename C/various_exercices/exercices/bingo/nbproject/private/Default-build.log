@@ -1,0 +1,8 @@
+clang -std=c99 -Wall -Wextra -g    bingo.c   -o bingo
+bingo.c:7:49: warning: unused parameter 'val_max' [-Wunused-parameter]
+static uint32_t *generer_tab_aleatoire(uint32_t val_max)
+                                                ^
+bingo.c:16:14: warning: unused variable 'val' [-Wunused-variable]
+    uint32_t val = 42;
+             ^
+2 warnings generated.

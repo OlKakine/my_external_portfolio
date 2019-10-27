@@ -1,0 +1,1 @@
+rm -rf test_morse.o test_morse_LS test_morse_LD libmorseLS.a libmorseLD.so

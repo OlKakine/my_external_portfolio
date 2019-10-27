@@ -1,0 +1,31 @@
+clang -std=c99 -Wall -Wextra -g    jedi.c   -o jedi
+jedi.c:22:30: warning: unused parameter 'jedi' [-Wunused-parameter]
+void print_jedi(struct jedi *jedi)
+                             ^
+jedi.c:36:25: warning: unused parameter 'bin' [-Wunused-parameter]
+int16_t print_isj(char *bin, uint32_t isj)
+                        ^
+jedi.c:36:39: warning: unused parameter 'isj' [-Wunused-parameter]
+int16_t print_isj(char *bin, uint32_t isj)
+                                      ^
+jedi.c:39:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+jedi.c:70:17: warning: unused variable 'jedi' [-Wunused-variable]
+    struct jedi jedi;
+                ^
+jedi.c:68:30: warning: unused parameter 'in' [-Wunused-parameter]
+int16_t convert_to_bin(char *in, char *out)
+                             ^
+jedi.c:68:40: warning: unused parameter 'out' [-Wunused-parameter]
+int16_t convert_to_bin(char *in, char *out)
+                                       ^
+jedi.c:72:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+8 warnings generated.
+/usr/bin/../lib/gcc/x86_64-linux-gnu/7.3.0/../../../x86_64-linux-gnu/crt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+<builtin>: recipe for target 'jedi' failed
+make: *** [jedi] Error 1

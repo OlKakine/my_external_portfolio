@@ -1,0 +1,16 @@
+Bienvenue chez les flux
+ Saississez des couples nom age (ex : doe 35)
+ sur une même ligne en validant par un retour chariot
+ Tapez Q pour quitter le programme
+nom = Ripley - age = 30 ans
+nom = Connor - age = 19 ans
+####
+nom = McFly - age = 16 ans
+nom = Who - age = 953 ans
+####
+nom = Neo - age = 34 ans
+nom = Deckard - age = 40 ans
+####
+nom = Kirk - age = 42 ans
+nom = Koenig - age = 47 ans
+nom = Skywalker - age = 26 ans

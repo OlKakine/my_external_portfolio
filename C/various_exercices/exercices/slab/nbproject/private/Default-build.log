@@ -1,0 +1,23 @@
+clang -std=c99 -Wall -Wextra -g    slab.c   -o slab
+slab.c:23:41: warning: unused parameter 'table' [-Wunused-parameter]
+static void create_table(struct data ***table)
+                                        ^
+slab.c:30:41: warning: unused parameter 'table' [-Wunused-parameter]
+static void destroy_table(struct data **table)
+                                        ^
+slab.c:42:44: warning: unused parameter 'table' [-Wunused-parameter]
+static struct data *allocate(struct data **table, size_t size)
+                                           ^
+slab.c:42:58: warning: unused parameter 'size' [-Wunused-parameter]
+static struct data *allocate(struct data **table, size_t size)
+                                                         ^
+slab.c:53:38: warning: unused parameter 'table' [-Wunused-parameter]
+static void deallocate(struct data **table, struct data *d)
+                                     ^
+slab.c:53:58: warning: unused parameter 'd' [-Wunused-parameter]
+static void deallocate(struct data **table, struct data *d)
+                                                         ^
+slab.c:57:13: warning: unused function 'test' [-Wunused-function]
+static void test(void)
+            ^
+7 warnings generated.

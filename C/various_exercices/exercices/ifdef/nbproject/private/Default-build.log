@@ -1,0 +1,36 @@
+Already up to date.
+[3J[H[2JOn regarde d'abord si votre dépôt git est à jour...
+[32m================================================================================[0m
+
+*** Compréhension de l'exo ***
+
+Vous avez terminé l'exo ifdef? Merci de choisir parmi les propositions ci-
+dessous celle qui correspond le mieux à votre ressenti.
+
+    1.  Je n'ai compris ni l'exercice ni la correction
+    2.  Je n'ai pas réussi à faire l'exercice mais je pense avoir compris la 
+       correction
+    3.  J'étais pas loin d'avoir une solution qui fonctionne, je serais 
+       capable de le refaire sans aide
+    4.  Ma solution fonctionnait, mais j'ai trouvé de quoi l'améliorer dans la
+        correction
+    5.  Ma solution répondait parfaitement au problème, je n'ai presque rien 
+       appris en lisant la correction
+[32m
+================================================================================
+[0m
+%%%% <1-5> pour (dé)sélectionner une réponse
+%%%% <RET> pour valider et passer à la suite
+
+Traceback (most recent call last):
+  File "../../../.progress/update", line 153, in <module>
+    main()
+  File "../../../.progress/update", line 76, in main
+    q_capisce.play(0, 0, feedback=False)
+  File "/home/checchio/Documents/C/checchio/.progress/question.py", line 136, in play
+    usr_input = getchar()
+  File "/home/checchio/Documents/C/checchio/.progress/misc.py", line 72, in getchar
+    old_settings = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Makefile:5: recipe for target 'progress' failed
+make: *** [progress] Error 1

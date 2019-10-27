@@ -1,0 +1,5 @@
+clang -std=c99 -Wall -Wextra -g    daddy-cool.c   -o daddy-cool
+daddy-cool.c:18:10: warning: unused variable 'positions' [-Wunused-variable]
+    long positions[NB_POS] = { 9,42,44,52,110,114,130,157,179,225,229,247,248,
+         ^
+1 warning generated.

@@ -1,0 +1,14 @@
+clang -std=c99 -Wall -Wextra -g    void.c   -o void
+void.c:5:32: warning: unused parameter 'byte' [-Wunused-parameter]
+static void print_byte(uint8_t byte)
+                               ^
+void.c:9:32: warning: unused parameter 'base' [-Wunused-parameter]
+static void print_memory(void *base, size_t size)
+                               ^
+void.c:9:45: warning: unused parameter 'size' [-Wunused-parameter]
+static void print_memory(void *base, size_t size)
+                                            ^
+void.c:5:13: warning: unused function 'print_byte' [-Wunused-function]
+static void print_byte(uint8_t byte)
+            ^
+4 warnings generated.

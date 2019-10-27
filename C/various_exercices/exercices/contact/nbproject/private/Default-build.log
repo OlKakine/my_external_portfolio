@@ -1,0 +1,50 @@
+clang -std=c99 -Wall -Wextra -g    contact.c   -o contact
+contact.c:28:47: warning: unused parameter 'numero' [-Wunused-parameter]
+static struct adresse *creer_adresse(uint16_t numero,
+                                              ^
+contact.c:29:22: warning: unused parameter 'rue' [-Wunused-parameter]
+                                     const char *rue,
+                                                 ^
+contact.c:30:19: warning: unused parameter 'code_postal' [-Wunused-parameter]
+                                     uint16_t code_postal,
+                                              ^
+contact.c:31:22: warning: unused parameter 'pays' [-Wunused-parameter]
+                                     const char *pays)
+                                                 ^
+contact.c:44:44: warning: unused parameter 'nouveau_contact' [-Wunused-parameter]
+static void creer_contact(struct contact **nouveau_contact,
+                                           ^
+contact.c:45:18: warning: unused parameter 'prenom' [-Wunused-parameter]
+                          const char *prenom,
+                                      ^
+contact.c:46:18: warning: unused parameter 'nom' [-Wunused-parameter]
+                          const char *nom,
+                                      ^
+contact.c:47:15: warning: unused parameter 'numero' [-Wunused-parameter]
+                          uint16_t numero,
+                                   ^
+contact.c:48:18: warning: unused parameter 'rue' [-Wunused-parameter]
+                          const char *rue,
+                                      ^
+contact.c:49:15: warning: unused parameter 'code_postal' [-Wunused-parameter]
+                          uint16_t code_postal,
+                                   ^
+contact.c:50:18: warning: unused parameter 'pays' [-Wunused-parameter]
+                          const char *pays)
+                                      ^
+contact.c:58:46: warning: unused parameter 'adr' [-Wunused-parameter]
+static void liberer_adresse(struct adresse **adr)
+                                             ^
+contact.c:67:45: warning: unused parameter 'c' [-Wunused-parameter]
+static void liberer_contact(struct contact *c)
+                                            ^
+contact.c:75:46: warning: unused parameter 'c' [-Wunused-parameter]
+static void afficher_contact(struct contact *c)
+                                             ^
+contact.c:28:24: warning: unused function 'creer_adresse' [-Wunused-function]
+static struct adresse *creer_adresse(uint16_t numero,
+                       ^
+contact.c:58:13: warning: unused function 'liberer_adresse' [-Wunused-function]
+static void liberer_adresse(struct adresse **adr)
+            ^
+16 warnings generated.

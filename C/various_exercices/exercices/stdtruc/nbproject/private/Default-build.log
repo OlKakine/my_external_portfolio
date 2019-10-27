@@ -1,0 +1,8 @@
+clang -std=c99 -Wall -Wextra -g    stdtruc.c   -o stdtruc
+stdtruc.c:15:10: warning: unused variable 'nom' [-Wunused-variable]
+    char nom[20];   // Variable de stockage du nom saisi
+         ^
+stdtruc.c:16:14: warning: unused variable 'age' [-Wunused-variable]
+    uint16_t age;   // Variable de stockage de l'age saisi
+             ^
+2 warnings generated.

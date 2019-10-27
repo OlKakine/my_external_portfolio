@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="./tps.css" type="text/css" />
+</head>
+<body>
+<h1 id="table-de-hachage">Table de Hachage</h1>
+<h2 id="présentation">Présentation</h2>
+<p>Une table de hachage est une structure de données permettant d'implémenter efficacement des dictionnaires. Sous des hypothèses raisonnables, les opérations principales (insertion, recherche, suppression) sont en moyenne à coût constant <em>O(1)</em>.</p>
+<p>La structure est en fait un tableau <code>T</code> de <code>m</code> listes chaînées (voir Fig. 1, tirée de <em>&quot;Introduction to algorithms, second edition&quot;, Cormen et al., The MIT Press</em>.). Lors de l'insertion d'un couple <code>&lt;cle, valeur&gt;</code>, une <em>fonction de hachage</em> est appliquée à la clé, qui retourne une valeur entière <code>h(cle)</code>. L'insertion a alors lieu dans la liste chaînée d'index <code>h(cle)</code>. Chaque liste <code>T[k]</code> contient donc tous les éléments dits en collision, c'est-à-dire dont la valeur de hachage <code>h(cle)</code> est <code>k</code>.</p>
+<div class="figure">
+<img src="./tableHachage.png" alt="Fig. 1: Structure d&#39;une table de hachage T. Chaque liste chaînée en T[k] contient tous les éléments dont la valeur de hachage h(cle) est k. Par exemple h(k1) = h(k4) et h(k5) = h(k2) = h(k7)" />
+<p class="caption"><em>Fig. 1: Structure d'une table de hachage <code>T</code>. Chaque liste chaînée en <code>T[k]</code> contient tous les éléments dont la valeur de hachage <code>h(cle)</code> est <code>k</code>. Par exemple <code>h(k1) = h(k4)</code> et <code>h(k5) = h(k2) = h(k7)</code></em></p>
+</div>
+<p>L'espace des indexes étant généralement plus petit que celui des valeurs de hachage, l'insertion a en fait lieu dans la liste positionnée en <code>h(cle)</code> modulo <code>m</code>. Les clés sont supposées uniques : une valeur n'est insérée que si elle n'est pas déjà présente dans la liste. Dans le cas général, aucun ordre n'est maintenu sur les listes de collision.</p>
+<p>Les performances d'une table de hachage dépendent très fortement de la fonction de hachage. Dans le pire des cas, tous les éléments sont dans la même liste de collision et les coûts sont identiques à une liste chaînée simple. Une bonne fonction de hachage répartit au contraire les éléments de manière quasi-uniforme dans les listes de la table, tout en gardant un coût de calcul raisonnable.</p>
+<h2 id="table-de-hachage-statique">Table de hachage statique</h2>
+<p>Le travail demandé consiste à utiliser une table de hachage pour implémenter un annuaire associant des numéros de téléphone à des noms (les clés). Dans une première approche, cette table sera <em>statique</em>, c'est-à-dire que sa taille sera fixée à la compilation et ne changera pas en cours d'exécution. Dans un deuxième temps, on s'intéressera à la possibilité de redimensionner dynamiquement la table de hachage.</p>
+<p>Les données manipulées sont des noms et numéros de téléphone représentés comme des chaînes de caractères. En C, une chaîne est une suite de caractères se terminant par le caractère <code>\0</code>. La bibliothèque standard du langage C fournit diverses fonctions de manipulation de chaînes de caractères, déclarées dans le fichier <code>string.h</code>.</p>
+<h3 id="architecture-logicielle">Architecture logicielle</h3>
+<p>Cette section fixe les consignes quant à l'organisation de votre programme en différents modules. Vous implémenterez ici une <em>bibliothèque de gestion d'un annuaire</em>, qui prendra la forme d'une bibliothèque dynamique (fichier <code>.so</code>) embarquant toutes les fonctionnalités demandées.</p>
+<p><strong>Vous devez respecter scrupuleusement le découpage proposé et la spécification ci-dessous (pas de modification des prototypes)</strong>.</p>
+<p>Votre projet comportera <em>au moins</em> trois modules dont le contenu est décrit ci-après. L'arborescence de votre projet est aussi imposée, et sera décrite à la fin de ce document.</p>
+<h4 id="module-contact">Module contact</h4>
+<p>Un <code>contact</code> est une structure de données représentant un contact de l'annuaire, à savoir une association entre un nom et un numéro de téléphone.</p>
+<p>Le module <code>contact</code> implémente les fonctionnalités nécessaires à la manipulation d'un chainage de contacts par le module <code>directory</code>, décrit juste après, implémentant l'annuaire à proprement parler.</p>
+<p>Vous pouvez voir ce module comme la spécialisation d'un paquetage de gestion de liste chainée, qu'on peut aisément tester en dehors du projet (c'est-à-dire sans qu'il soit utilisé par un annuaire).</p>
+<p>La spécification de ce module n'est pas distribuée, <strong>c'est à vous d'identifier les fonctionnalités qui seront utiles pour construire un annuaire de contacts</strong>. De la même manière, vous devrez mettre en place vous-même une batterie de tests validant votre implémentation.</p>
+<h4 id="module-directory">Module directory</h4>
+<p>Ce module définit une structure d'annuaire (<em>directory</em> en anglais) <code>struct dir</code> comme un tableau de listes chaînées contenant des <code>contact</code> représentant une association entre un nom et un numero de téléphone.</p>
+<p>Les opérations demandées sur la structure d'annuaire sont détaillées dans l'entête <code>directory.h</code>:</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co">  Structure de données représentant un annuaire.</span>
+<span class="co">  Son contenu est détaillé dans directory.c.</span>
+<span class="co">*/</span>
+<span class="kw">struct</span> dir;
+
+<span class="co">/* Crée un nouvel annuaire contenant _len_ listes vides. */</span>
+<span class="kw">struct</span> dir *dir_create(<span class="dt">uint32_t</span> len);
+
+<span class="co">/*</span>
+<span class="co">  Insère un nouveau contact dans l&#39;annuaire _dir_, construit à partir des nom et</span>
+<span class="co">  numéro passés en paramètre. Si il existait déjà un contact du même nom, son</span>
+<span class="co">  numéro est remplacé et la fonction retourne une copie de l&#39;ancien numéro.</span>
+<span class="co">  Sinon, la fonction retourne NULL.</span>
+<span class="co">*/</span>
+<span class="dt">char</span> *dir_insert(<span class="kw">struct</span> dir *dir, <span class="dt">const</span> <span class="dt">char</span> *name, <span class="dt">const</span> <span class="dt">char</span> *num);
+
+<span class="co">/*</span>
+<span class="co">  Retourne le numéro associé au nom _name_ dans l&#39;annuaire _dir_. Si aucun</span>
+<span class="co">  contact ne correspond, retourne NULL.</span>
+<span class="co">*/</span>
+<span class="dt">const</span> <span class="dt">char</span> *dir_lookup_num(<span class="kw">struct</span> dir *dir, <span class="dt">const</span> <span class="dt">char</span> *name);
+
+<span class="co">/*</span>
+<span class="co">  Supprime le contact de nom _name_ de l&#39;annuaire _dir_. Si aucun contact ne</span>
+<span class="co">  correspond, ne fait rien.</span>
+<span class="co">*/</span>
+<span class="dt">void</span> dir_delete(<span class="kw">struct</span> dir *dir, <span class="dt">const</span> <span class="dt">char</span> *name);
+
+<span class="co">/* Libère la mémoire associée à l&#39;annuaire _dir_. */</span>
+<span class="dt">void</span> dir_free(<span class="kw">struct</span> dir *dir);
+
+<span class="co">/* Affiche sur la sortie standard le contenu de l&#39;annuaire _dir_. */</span>
+<span class="dt">void</span> dir_print(<span class="kw">struct</span> dir *dir);</code></pre></div>
+<h5 id="remarques">Remarques :</h5>
+<ul>
+<li><p>La structure <code>struct dir</code> est simplement déclarée dans le fichier d'en-tête. L'implémentation de cette structure (c'est-à-dire <em>son contenu</em>) doit apparaitre dans le code source implémentant le module <code>directory</code> (<code>directory.c</code>, par exemple). On sépare ainsi l'interface de l'implémentation. Ainsi, un programme de test qui fait appel aux fonctions déclarées dans <code>directory.h</code> permettra de tester <em>n'importe quelle implémentation du module <code>directory</code></em> (comprenez: quels que soient les champs que vous définissez à l'intérieur de la structure <code>struct dict</code>), à condition que ce module implémente bien toutes les fonctionnalités exposées par le <code>.h</code>, bien entendu ;</p></li>
+<li><p>Le type <code>const char *</code> représente une chaine de caractère constante (dont les caractères ne peuvent pas être modifés). Plus généralement, le mot-clé <code>const</code> appliqué à un type pointeur sous la forme <code>const type *</code> indique que la mémoire référencée par le pointeur ne peut pas être modifiée. Conséquence directe : il est interdit de passer un paramètre de type <code>const type *</code> à une fonction f dont le prototype serait <code>void f(type *)</code> (<code>f</code> comme <code>free()</code>?).</p></li>
+</ul>
+<h4 id="module-hash">Module hash</h4>
+<p>La fonction de hachage des noms est donnée par l'algorithme suivant:</p>
+<div class="figure">
+<img src="./algohash.png" alt="Fig. 2: Fonction de hachage classique et efficace, introduite par Daniel J. Bernstein. Noter l&#39;utilisation des valeurs 5381 (nombre premier) et 33 (= 32 + 1)." />
+<p class="caption"><em>Fig. 2: Fonction de hachage classique et efficace, introduite par Daniel J. Bernstein. Noter l'utilisation des valeurs 5381 (nombre premier) et 33 (= 32 + 1).</em></p>
+</div>
+<p>Le module <code>hash</code> devra contenir l'implémentation de cette fonction de hachage. Bien qu'elle ne soit utilisée que par le module <code>directory</code>, on décide ici de placer cette fonction dans un module à part, ce qui permettrait d'étendre votre projet en ajoutant d'autres fonctions de hachage pour évaluer leur impact sur la façon dont se remplit votre table de hachage. Les fonctions de hachage sont aussi indépendantes du reste du projet, et peuvent de fait être testées de manière autonome.</p>
+<h2 id="redimensionnement-dynamique-de-la-table-de-hachage">Redimensionnement dynamique de la table de hachage</h2>
+<p>Lorsque le nombre d’entrées grandit, le risque de collisions augmente et donc la longueur des listes et le coût des opérations. Inversement, si le nombre d’entrées diminue, la table va utiliser inutilement de la mémoire. Dans cette 2ème étape, on souhaite donc disposer de fonctions (internes à votre bibliothèque) permettant le redimensionnement de la table afin de minimiser les coûts liés à une table très remplie, ou de réduire l’empreinte mémoire d’une table majoritairement vide. Ainsi, on effectuera :</p>
+<ul>
+<li><p>un agrandissement de la table lorsque le nombre de contacts se trouvant dans l'annuaire dépasse 75% du nombre d'entrées dans la table (en pratique, on doublera la taille de la table) ;</p></li>
+<li><p>un rétrécissement de la table lorsque le nombre de contacts se trouvant dans l'annuaire représente moins de 15% du nombre d'entrées dans la table (en pratique, on divisera par deux la taille de la table, sans toutefois descendre en-dessous de 10 entrées).</p></li>
+</ul>
+<p>Bien entendu, il faudra mettre en oeuvre de nouveaux tests démontrant le bon fonctionnement de l'agrandissement et du rétrécissement dynamique de l'annuaire.</p>
+<h2 id="squelette-de-code">Squelette de code</h2>
+<p>Nous fournissons un squelette de code pour vous aider à démarrer.</p>
+<h3 id="arborescence">Arborescence</h3>
+<p>Nous vous demandons de respecter l'aborescence fournie, qui contient :</p>
+<ul>
+<li>un répertoire <code>src/</code> qui regroupe les fichiers source (<code>.c</code>) permettant de construire la bibliothèque ;</li>
+<li>un répertoire <code>include/</code> qui regroupe les entêtes des modules de la bibliothèque ;</li>
+<li>un répertoire <code>obj/</code> qui accueillera les fichiers objets (<code>.o</code>) construits lors de la compilation du projet ;</li>
+<li>un répertoire <code>lib/</code> qui contiendra la bibliothèque dynamique <code>libdirectory.so</code>, produit final de votre projet ;</li>
+<li>un répertoire <code>tests/</code> qui contient le code source de programmes de tests ;</li>
+<li>un <code>Makefile</code> permettant de construire la bibliothèque à partir des sources et les exécutables de test.</li>
+</ul>
+<p>On retrouve souvent ce type d'organisation, la règle communément admise étant de <em>&quot;ne jamais compiler dans les sources&quot;</em> (expression familière qui laisse entendre que générer des fichiers issus de la compilation dans le même répertoire que celui où se trouvent les fichiers source qui ont permis de les générer, c'est mal).</p>
+<h3 id="compilation">Compilation</h3>
+<p>Le <code>Makefile</code> fourni est capable de générer la bibliothèque dynamique <code>libdirectory.so</code> avec les contraintes suivantes :</p>
+<ul>
+<li>taper <code>make</code> dans le répertoire de départ lance la génération du fichier <code>lib/libdirectory.so</code> ;</li>
+<li>la compilation d'un fichier <code>src/toto.c</code> provoque la création d'un fichier objet <code>obj/toto.o</code> ;</li>
+<li>à l'édition des liens, on fusionne les fichiers objets situés dans le répertoire <code>obj/</code> pour créer la bibliothèque dynamique <code>libdirectory.so</code> dans le répertoire <code>lib/</code> ;</li>
+<li>la règle <code>clean</code> supprime les fichiers générés, c'est-à-dire le contenu des répertoires <code>obj/</code> et <code>lib/</code> ;</li>
+<li>la règle <code>tests</code> permet la compilation des programmes de tests (dont les sources se trouvent dans <code>tests/</code>).</li>
+</ul>
+<h2 id="annexes">Annexes</h2>
+<h3 id="génération-dune-bibliothèque-dynamique">Génération d'une bibliothèque dynamique</h3>
+<p>Pour construire une bibliothèque dynamique, il suffit de :</p>
+<ul>
+<li>rajouter l'option <code>-fPIC</code> à la compilation (dans les <code>CFLAGS</code>) ;</li>
+<li>rajouter l'option <code>-shared</code> lors de l'édition des liens (dans les <code>LDFLAGS</code>).</li>
+</ul>
+<p>Pour lier un programme de test à la bibliothèque dynamique, il suffit de :</p>
+<ul>
+<li>rajouter l'option <code>-Llib/ -ldirectory</code> lors de l'édition des liens, avec <code>lib/</code> correspondant au chemin (relatif ou absolu) dans lequel se trouve le fichier <code>libdirectory.so</code> ;</li>
+<li>rajouter le chemin absolu vers <code>libdirectory.so</code> à la variable d'environnement <code>LD_LIBRARY_PATH</code>, par exemple :</li>
+</ul>
+<pre><code>    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/bibi/projetC/lib ./mon_super_test</code></pre>
+<p>A la manière de <code>$PATH</code>, <code>$LD_LIBRARY_PATH</code> liste un ensemble de répertoires dans lesquels on va chercher des bibliothèques dynamiques (fichiers <code>.so</code>) à charger lors de l'exécution d'un programme. Vous pouvez afficher la liste des bibliothèques dynamiques chargées à l'exécution d'un programme <code>toto</code> à l'aide de la commande :</p>
+<pre><code>    ldd ./toto</code></pre>
+<p>Vous trouvez ça pénible? Trois choix s'offrent à vous :</p>
+<ul>
+<li><em>exporter</em> la nouvelle valeur de la variable <code>LD_LIBRARY_PATH</code> pour qu'elle soit chargée à chaque fois que vous lancez un nouveau terminal, en rajoutant cette ligne au fichier <code>.bashrc</code> qui se trouve à la racine de votre compte (overkill!) (bien entendu, le chemin <code>/home/coco/boulot/C/hash/lib</code> est à remplacer par le votre):</li>
+</ul>
+<pre><code>    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/coco/boulot/C/hash/lib</code></pre>
+<ul>
+<li><p>OU ajouter une règle permettant de lancer un test dans votre <code>Makefile</code>, qui intègre le positionnement de la variable d'environnement à la bonne valeur (vachement mieux, déjà) ;</p></li>
+<li><p>OU indiquer lors de la <em>compilation</em> du programme que la bibliothèque qu'il faudra charger à l'exécution se trouve dans <code>/home/toto/tps/hash/lib</code> en ajoutant l'option <code>-Wl,-rpath=/home/toto/tps/hash/lib</code> lors de la phase d'édition des liens (variable LDFLAGS dans le Makefile) (hey ouais, c'est un tips &quot;ceinture noire&quot;, très utile pour briller dans les diners mondains).</p></li>
+</ul>
+<p>Le <code>Makefile</code> du projet utilise cette dernière technique pour générer des programmes de tests exécutables quel que soit l'environnement dans lequel ils sont lancés.</p>
+</body>
+</html>
