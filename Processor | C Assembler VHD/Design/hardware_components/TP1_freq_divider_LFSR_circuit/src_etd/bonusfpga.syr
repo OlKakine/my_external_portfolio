@@ -1,0 +1,1730 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.04 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.04 secs
+ 
+--> 
+Reading design: bonusfpga.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "bonusfpga.prj"
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "bonusfpga"
+Output Format                      : NGC
+Target Device                      : xc7z010-1-clg400
+
+---- Source Options
+Top Module Name                    : bonusfpga
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Shift Register Extraction          : YES
+ROM Style                          : Auto
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Shift Register Minimum Size        : 2
+Use DSP Block                      : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : Auto
+Reduce Control Sets                : Auto
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 32
+Register Duplication               : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Power Reduction                    : NO
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Parsing VHDL file "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" into library work
+Parsing entity <bonusfpga>.
+Parsing architecture <mixte> of entity <bonusfpga>.
+Parsing VHDL file "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/AC.vhd" into library work
+Parsing entity <AC>.
+Parsing architecture <comportemental> of entity <ac>.
+Parsing VHDL file "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/basc_d.vhd" into library work
+Parsing entity <basc_D>.
+Parsing architecture <behavioral> of entity <basc_d>.
+Parsing VHDL file "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/div_freq.vhd" into library work
+Parsing entity <div_freq>.
+Parsing architecture <structurelle> of entity <div_freq>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating entity <bonusfpga> (architecture <mixte>) from library <work>.
+
+Elaborating entity <div_freq> (architecture <structurelle>) from library <work>.
+
+Elaborating entity <basc_D> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <AC> (architecture <comportemental>) from library <work>.
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <bonusfpga>.
+    Related source file is "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd".
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 73: Output port <co> of the instance <AC2> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 81: Output port <co> of the instance <AC3> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 89: Output port <qb> of the instance <FD0> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 96: Output port <qb> of the instance <FD1> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 103: Output port <qb> of the instance <FD2> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/bonusfpga.vhd" line 110: Output port <qb> of the instance <FD3> is unconnected or connected to loadless signal.
+    Summary:
+	no macro.
+Unit <bonusfpga> synthesized.
+
+Synthesizing Unit <div_freq>.
+    Related source file is "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/div_freq.vhd".
+    Summary:
+	no macro.
+Unit <div_freq> synthesized.
+
+Synthesizing Unit <basc_D>.
+    Related source file is "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/basc_d.vhd".
+    Found 1-bit register for signal <val>.
+    Summary:
+	inferred   1 D-type flip-flop(s).
+Unit <basc_D> synthesized.
+
+Synthesizing Unit <AC>.
+    Related source file is "/user/1/.base/checchio/home/Documents/tp_archi/src_etd/vhd/AC.vhd".
+    Summary:
+Unit <AC> synthesized.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 30
+ 1-bit register                                        : 30
+# Xors                                                 : 8
+ 1-bit xor2                                            : 8
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 30
+ Flip-Flops                                            : 30
+# Xors                                                 : 8
+ 1-bit xor2                                            : 8
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <bonusfpga> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block bonusfpga, actual ratio is 0.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 30
+ Flip-Flops                                            : 30
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Top Level Output File Name         : bonusfpga.ngc
+
+Primitive and Black Box Usage:
+------------------------------
+# BELS                             : 31
+#      INV                         : 28
+#      LUT2                        : 1
+#      LUT3                        : 2
+# FlipFlops/Latches                : 30
+#      FDRE                        : 30
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 5
+#      IBUF                        : 1
+#      OBUF                        : 4
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 7z010clg400-1 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:              30  out of  35200     0%  
+ Number of Slice LUTs:                   31  out of  17600     0%  
+    Number used as Logic:                31  out of  17600     0%  
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:     31
+   Number with an unused Flip Flop:       1  out of     31     3%  
+   Number with an unused LUT:             0  out of     31     0%  
+   Number of fully used LUT-FF pairs:    30  out of     31    96%  
+   Number of unique control sets:        27
+
+IO Utilization: 
+ Number of IOs:                           6
+ Number of bonded IOBs:                   6  out of    100     6%  
+
+Specific Feature Utilization:
+ Number of BUFG/BUFGCTRLs:                1  out of     32     3%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+Timing Report
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+-------------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)         | Load  |
+-----------------------------------+-------------------------------+-------+
+clk                                | BUFGP                         | 1     |
+Div0/FD0/val                       | NONE(Horloge[0].DivX/FD0/val) | 1     |
+Horloge[0].DivX/FD0/val            | NONE(Horloge[1].DivX/FD0/val) | 1     |
+Horloge[1].DivX/FD0/val            | NONE(Horloge[2].DivX/FD0/val) | 1     |
+Horloge[2].DivX/FD0/val            | NONE(Horloge[3].DivX/FD0/val) | 1     |
+Horloge[3].DivX/FD0/val            | NONE(Horloge[4].DivX/FD0/val) | 1     |
+Horloge[4].DivX/FD0/val            | NONE(Horloge[5].DivX/FD0/val) | 1     |
+Horloge[5].DivX/FD0/val            | NONE(Horloge[6].DivX/FD0/val) | 1     |
+Horloge[6].DivX/FD0/val            | NONE(Horloge[7].DivX/FD0/val) | 1     |
+Horloge[7].DivX/FD0/val            | NONE(Horloge[8].DivX/FD0/val) | 1     |
+Horloge[8].DivX/FD0/val            | NONE(Horloge[9].DivX/FD0/val) | 1     |
+Horloge[9].DivX/FD0/val            | NONE(Horloge[10].DivX/FD0/val)| 1     |
+Horloge[10].DivX/FD0/val           | NONE(Horloge[11].DivX/FD0/val)| 1     |
+Horloge[11].DivX/FD0/val           | NONE(Horloge[12].DivX/FD0/val)| 1     |
+Horloge[12].DivX/FD0/val           | NONE(Horloge[13].DivX/FD0/val)| 1     |
+Horloge[13].DivX/FD0/val           | NONE(Horloge[14].DivX/FD0/val)| 1     |
+Horloge[14].DivX/FD0/val           | NONE(Horloge[15].DivX/FD0/val)| 1     |
+Horloge[15].DivX/FD0/val           | NONE(Horloge[16].DivX/FD0/val)| 1     |
+Horloge[16].DivX/FD0/val           | NONE(Horloge[17].DivX/FD0/val)| 1     |
+Horloge[17].DivX/FD0/val           | NONE(Horloge[18].DivX/FD0/val)| 1     |
+Horloge[18].DivX/FD0/val           | NONE(Horloge[19].DivX/FD0/val)| 1     |
+Horloge[19].DivX/FD0/val           | NONE(Horloge[20].DivX/FD0/val)| 1     |
+Horloge[20].DivX/FD0/val           | NONE(Horloge[21].DivX/FD0/val)| 1     |
+Horloge[21].DivX/FD0/val           | NONE(Horloge[22].DivX/FD0/val)| 1     |
+Horloge[22].DivX/FD0/val           | NONE(Horloge[23].DivX/FD0/val)| 1     |
+Horloge[23].DivX/FD0/val           | NONE(Horloge[24].DivX/FD0/val)| 1     |
+Horloge[24].DivX/FD0/val           | NONE(FD3/val)                 | 4     |
+-----------------------------------+-------------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -1
+
+   Minimum period: 1.185ns (Maximum Frequency: 843.882MHz)
+   Minimum input arrival time before clock: 1.369ns
+   Maximum output required time after clock: 0.708ns
+   Maximum combinational path delay: No path found
+
+Timing Details:
+---------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Div0/FD0/val (FF)
+  Destination:       Div0/FD0/val (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk rising
+
+  Data Path: Div0/FD0/val to Div0/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Div0/FD0/val (Div0/FD0/val)
+     INV:I->O              1   0.067   0.399  Div0/FD0/qb1_INV_0 (Div0/fil)
+     FDRE:D                    0.011          Div0/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Div0/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[0].DivX/FD0/val (FF)
+  Destination:       Horloge[0].DivX/FD0/val (FF)
+  Source Clock:      Div0/FD0/val rising
+  Destination Clock: Div0/FD0/val rising
+
+  Data Path: Horloge[0].DivX/FD0/val to Horloge[0].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[0].DivX/FD0/val (Horloge[0].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[0].DivX/FD0/qb1_INV_0 (Horloge[0].DivX/fil)
+     FDRE:D                    0.011          Horloge[0].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[0].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[1].DivX/FD0/val (FF)
+  Destination:       Horloge[1].DivX/FD0/val (FF)
+  Source Clock:      Horloge[0].DivX/FD0/val rising
+  Destination Clock: Horloge[0].DivX/FD0/val rising
+
+  Data Path: Horloge[1].DivX/FD0/val to Horloge[1].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[1].DivX/FD0/val (Horloge[1].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[1].DivX/FD0/qb1_INV_0 (Horloge[1].DivX/fil)
+     FDRE:D                    0.011          Horloge[1].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[1].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[2].DivX/FD0/val (FF)
+  Destination:       Horloge[2].DivX/FD0/val (FF)
+  Source Clock:      Horloge[1].DivX/FD0/val rising
+  Destination Clock: Horloge[1].DivX/FD0/val rising
+
+  Data Path: Horloge[2].DivX/FD0/val to Horloge[2].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[2].DivX/FD0/val (Horloge[2].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[2].DivX/FD0/qb1_INV_0 (Horloge[2].DivX/fil)
+     FDRE:D                    0.011          Horloge[2].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[2].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[3].DivX/FD0/val (FF)
+  Destination:       Horloge[3].DivX/FD0/val (FF)
+  Source Clock:      Horloge[2].DivX/FD0/val rising
+  Destination Clock: Horloge[2].DivX/FD0/val rising
+
+  Data Path: Horloge[3].DivX/FD0/val to Horloge[3].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[3].DivX/FD0/val (Horloge[3].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[3].DivX/FD0/qb1_INV_0 (Horloge[3].DivX/fil)
+     FDRE:D                    0.011          Horloge[3].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[3].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[4].DivX/FD0/val (FF)
+  Destination:       Horloge[4].DivX/FD0/val (FF)
+  Source Clock:      Horloge[3].DivX/FD0/val rising
+  Destination Clock: Horloge[3].DivX/FD0/val rising
+
+  Data Path: Horloge[4].DivX/FD0/val to Horloge[4].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[4].DivX/FD0/val (Horloge[4].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[4].DivX/FD0/qb1_INV_0 (Horloge[4].DivX/fil)
+     FDRE:D                    0.011          Horloge[4].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[4].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[5].DivX/FD0/val (FF)
+  Destination:       Horloge[5].DivX/FD0/val (FF)
+  Source Clock:      Horloge[4].DivX/FD0/val rising
+  Destination Clock: Horloge[4].DivX/FD0/val rising
+
+  Data Path: Horloge[5].DivX/FD0/val to Horloge[5].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[5].DivX/FD0/val (Horloge[5].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[5].DivX/FD0/qb1_INV_0 (Horloge[5].DivX/fil)
+     FDRE:D                    0.011          Horloge[5].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[5].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[6].DivX/FD0/val (FF)
+  Destination:       Horloge[6].DivX/FD0/val (FF)
+  Source Clock:      Horloge[5].DivX/FD0/val rising
+  Destination Clock: Horloge[5].DivX/FD0/val rising
+
+  Data Path: Horloge[6].DivX/FD0/val to Horloge[6].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[6].DivX/FD0/val (Horloge[6].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[6].DivX/FD0/qb1_INV_0 (Horloge[6].DivX/fil)
+     FDRE:D                    0.011          Horloge[6].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[6].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[7].DivX/FD0/val (FF)
+  Destination:       Horloge[7].DivX/FD0/val (FF)
+  Source Clock:      Horloge[6].DivX/FD0/val rising
+  Destination Clock: Horloge[6].DivX/FD0/val rising
+
+  Data Path: Horloge[7].DivX/FD0/val to Horloge[7].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[7].DivX/FD0/val (Horloge[7].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[7].DivX/FD0/qb1_INV_0 (Horloge[7].DivX/fil)
+     FDRE:D                    0.011          Horloge[7].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[7].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[8].DivX/FD0/val (FF)
+  Destination:       Horloge[8].DivX/FD0/val (FF)
+  Source Clock:      Horloge[7].DivX/FD0/val rising
+  Destination Clock: Horloge[7].DivX/FD0/val rising
+
+  Data Path: Horloge[8].DivX/FD0/val to Horloge[8].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[8].DivX/FD0/val (Horloge[8].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[8].DivX/FD0/qb1_INV_0 (Horloge[8].DivX/fil)
+     FDRE:D                    0.011          Horloge[8].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[8].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[9].DivX/FD0/val (FF)
+  Destination:       Horloge[9].DivX/FD0/val (FF)
+  Source Clock:      Horloge[8].DivX/FD0/val rising
+  Destination Clock: Horloge[8].DivX/FD0/val rising
+
+  Data Path: Horloge[9].DivX/FD0/val to Horloge[9].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[9].DivX/FD0/val (Horloge[9].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[9].DivX/FD0/qb1_INV_0 (Horloge[9].DivX/fil)
+     FDRE:D                    0.011          Horloge[9].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[9].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[10].DivX/FD0/val (FF)
+  Destination:       Horloge[10].DivX/FD0/val (FF)
+  Source Clock:      Horloge[9].DivX/FD0/val rising
+  Destination Clock: Horloge[9].DivX/FD0/val rising
+
+  Data Path: Horloge[10].DivX/FD0/val to Horloge[10].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[10].DivX/FD0/val (Horloge[10].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[10].DivX/FD0/qb1_INV_0 (Horloge[10].DivX/fil)
+     FDRE:D                    0.011          Horloge[10].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[10].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[11].DivX/FD0/val (FF)
+  Destination:       Horloge[11].DivX/FD0/val (FF)
+  Source Clock:      Horloge[10].DivX/FD0/val rising
+  Destination Clock: Horloge[10].DivX/FD0/val rising
+
+  Data Path: Horloge[11].DivX/FD0/val to Horloge[11].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[11].DivX/FD0/val (Horloge[11].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[11].DivX/FD0/qb1_INV_0 (Horloge[11].DivX/fil)
+     FDRE:D                    0.011          Horloge[11].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[11].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[12].DivX/FD0/val (FF)
+  Destination:       Horloge[12].DivX/FD0/val (FF)
+  Source Clock:      Horloge[11].DivX/FD0/val rising
+  Destination Clock: Horloge[11].DivX/FD0/val rising
+
+  Data Path: Horloge[12].DivX/FD0/val to Horloge[12].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[12].DivX/FD0/val (Horloge[12].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[12].DivX/FD0/qb1_INV_0 (Horloge[12].DivX/fil)
+     FDRE:D                    0.011          Horloge[12].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[12].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[13].DivX/FD0/val (FF)
+  Destination:       Horloge[13].DivX/FD0/val (FF)
+  Source Clock:      Horloge[12].DivX/FD0/val rising
+  Destination Clock: Horloge[12].DivX/FD0/val rising
+
+  Data Path: Horloge[13].DivX/FD0/val to Horloge[13].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[13].DivX/FD0/val (Horloge[13].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[13].DivX/FD0/qb1_INV_0 (Horloge[13].DivX/fil)
+     FDRE:D                    0.011          Horloge[13].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[13].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[14].DivX/FD0/val (FF)
+  Destination:       Horloge[14].DivX/FD0/val (FF)
+  Source Clock:      Horloge[13].DivX/FD0/val rising
+  Destination Clock: Horloge[13].DivX/FD0/val rising
+
+  Data Path: Horloge[14].DivX/FD0/val to Horloge[14].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[14].DivX/FD0/val (Horloge[14].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[14].DivX/FD0/qb1_INV_0 (Horloge[14].DivX/fil)
+     FDRE:D                    0.011          Horloge[14].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[14].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[15].DivX/FD0/val (FF)
+  Destination:       Horloge[15].DivX/FD0/val (FF)
+  Source Clock:      Horloge[14].DivX/FD0/val rising
+  Destination Clock: Horloge[14].DivX/FD0/val rising
+
+  Data Path: Horloge[15].DivX/FD0/val to Horloge[15].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[15].DivX/FD0/val (Horloge[15].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[15].DivX/FD0/qb1_INV_0 (Horloge[15].DivX/fil)
+     FDRE:D                    0.011          Horloge[15].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[15].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[16].DivX/FD0/val (FF)
+  Destination:       Horloge[16].DivX/FD0/val (FF)
+  Source Clock:      Horloge[15].DivX/FD0/val rising
+  Destination Clock: Horloge[15].DivX/FD0/val rising
+
+  Data Path: Horloge[16].DivX/FD0/val to Horloge[16].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[16].DivX/FD0/val (Horloge[16].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[16].DivX/FD0/qb1_INV_0 (Horloge[16].DivX/fil)
+     FDRE:D                    0.011          Horloge[16].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[16].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[17].DivX/FD0/val (FF)
+  Destination:       Horloge[17].DivX/FD0/val (FF)
+  Source Clock:      Horloge[16].DivX/FD0/val rising
+  Destination Clock: Horloge[16].DivX/FD0/val rising
+
+  Data Path: Horloge[17].DivX/FD0/val to Horloge[17].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[17].DivX/FD0/val (Horloge[17].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[17].DivX/FD0/qb1_INV_0 (Horloge[17].DivX/fil)
+     FDRE:D                    0.011          Horloge[17].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[17].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[18].DivX/FD0/val (FF)
+  Destination:       Horloge[18].DivX/FD0/val (FF)
+  Source Clock:      Horloge[17].DivX/FD0/val rising
+  Destination Clock: Horloge[17].DivX/FD0/val rising
+
+  Data Path: Horloge[18].DivX/FD0/val to Horloge[18].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[18].DivX/FD0/val (Horloge[18].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[18].DivX/FD0/qb1_INV_0 (Horloge[18].DivX/fil)
+     FDRE:D                    0.011          Horloge[18].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[18].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[19].DivX/FD0/val (FF)
+  Destination:       Horloge[19].DivX/FD0/val (FF)
+  Source Clock:      Horloge[18].DivX/FD0/val rising
+  Destination Clock: Horloge[18].DivX/FD0/val rising
+
+  Data Path: Horloge[19].DivX/FD0/val to Horloge[19].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[19].DivX/FD0/val (Horloge[19].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[19].DivX/FD0/qb1_INV_0 (Horloge[19].DivX/fil)
+     FDRE:D                    0.011          Horloge[19].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[19].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[20].DivX/FD0/val (FF)
+  Destination:       Horloge[20].DivX/FD0/val (FF)
+  Source Clock:      Horloge[19].DivX/FD0/val rising
+  Destination Clock: Horloge[19].DivX/FD0/val rising
+
+  Data Path: Horloge[20].DivX/FD0/val to Horloge[20].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[20].DivX/FD0/val (Horloge[20].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[20].DivX/FD0/qb1_INV_0 (Horloge[20].DivX/fil)
+     FDRE:D                    0.011          Horloge[20].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[20].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[21].DivX/FD0/val (FF)
+  Destination:       Horloge[21].DivX/FD0/val (FF)
+  Source Clock:      Horloge[20].DivX/FD0/val rising
+  Destination Clock: Horloge[20].DivX/FD0/val rising
+
+  Data Path: Horloge[21].DivX/FD0/val to Horloge[21].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[21].DivX/FD0/val (Horloge[21].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[21].DivX/FD0/qb1_INV_0 (Horloge[21].DivX/fil)
+     FDRE:D                    0.011          Horloge[21].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[21].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[22].DivX/FD0/val (FF)
+  Destination:       Horloge[22].DivX/FD0/val (FF)
+  Source Clock:      Horloge[21].DivX/FD0/val rising
+  Destination Clock: Horloge[21].DivX/FD0/val rising
+
+  Data Path: Horloge[22].DivX/FD0/val to Horloge[22].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[22].DivX/FD0/val (Horloge[22].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[22].DivX/FD0/qb1_INV_0 (Horloge[22].DivX/fil)
+     FDRE:D                    0.011          Horloge[22].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[22].DivX/FD0/val'
+  Clock period: 1.164ns (frequency: 859.106MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.164ns (Levels of Logic = 1)
+  Source:            Horloge[23].DivX/FD0/val (FF)
+  Destination:       Horloge[23].DivX/FD0/val (FF)
+  Source Clock:      Horloge[22].DivX/FD0/val rising
+  Destination Clock: Horloge[22].DivX/FD0/val rising
+
+  Data Path: Horloge[23].DivX/FD0/val to Horloge[23].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             2   0.282   0.405  Horloge[23].DivX/FD0/val (Horloge[23].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[23].DivX/FD0/qb1_INV_0 (Horloge[23].DivX/fil)
+     FDRE:D                    0.011          Horloge[23].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.164ns (0.360ns logic, 0.804ns route)
+                                       (30.9% logic, 69.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[23].DivX/FD0/val'
+  Clock period: 1.185ns (frequency: 843.882MHz)
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Delay:               1.185ns (Levels of Logic = 1)
+  Source:            Horloge[24].DivX/FD0/val (FF)
+  Destination:       Horloge[24].DivX/FD0/val (FF)
+  Source Clock:      Horloge[23].DivX/FD0/val rising
+  Destination Clock: Horloge[23].DivX/FD0/val rising
+
+  Data Path: Horloge[24].DivX/FD0/val to Horloge[24].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             5   0.282   0.426  Horloge[24].DivX/FD0/val (Horloge[24].DivX/FD0/val)
+     INV:I->O              1   0.067   0.399  Horloge[24].DivX/FD0/qb1_INV_0 (Horloge[24].DivX/fil)
+     FDRE:D                    0.011          Horloge[24].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.185ns (0.360ns logic, 0.825ns route)
+                                       (30.4% logic, 69.6% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Horloge[24].DivX/FD0/val'
+  Clock period: 1.185ns (frequency: 843.882MHz)
+  Total number of paths / destination ports: 9 / 4
+-------------------------------------------------------------------------
+Delay:               1.185ns (Levels of Logic = 1)
+  Source:            FD0/val (FF)
+  Destination:       FD0/val (FF)
+  Source Clock:      Horloge[24].DivX/FD0/val rising
+  Destination Clock: Horloge[24].DivX/FD0/val rising
+
+  Data Path: FD0/val to FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             5   0.282   0.426  FD0/val (FD0/val)
+     INV:I->O              1   0.067   0.399  AC0/Mxor_s_xo<0>1_INV_0 (D0)
+     FDRE:D                    0.011          FD0/val
+    ----------------------------------------
+    Total                      1.185ns (0.360ns logic, 0.825ns route)
+                                       (30.4% logic, 69.6% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Div0/FD0/val (FF)
+  Destination Clock: clk rising
+
+  Data Path: reset to Div0/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Div0/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Div0/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[0].DivX/FD0/val (FF)
+  Destination Clock: Div0/FD0/val rising
+
+  Data Path: reset to Horloge[0].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[0].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[0].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[1].DivX/FD0/val (FF)
+  Destination Clock: Horloge[0].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[1].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[1].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[1].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[2].DivX/FD0/val (FF)
+  Destination Clock: Horloge[1].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[2].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[2].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[2].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[3].DivX/FD0/val (FF)
+  Destination Clock: Horloge[2].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[3].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[3].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[3].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[4].DivX/FD0/val (FF)
+  Destination Clock: Horloge[3].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[4].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[4].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[4].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[5].DivX/FD0/val (FF)
+  Destination Clock: Horloge[4].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[5].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[5].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[5].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[6].DivX/FD0/val (FF)
+  Destination Clock: Horloge[5].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[6].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[6].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[6].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[7].DivX/FD0/val (FF)
+  Destination Clock: Horloge[6].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[7].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[7].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[7].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[8].DivX/FD0/val (FF)
+  Destination Clock: Horloge[7].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[8].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[8].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[8].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[9].DivX/FD0/val (FF)
+  Destination Clock: Horloge[8].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[9].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[9].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[9].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[10].DivX/FD0/val (FF)
+  Destination Clock: Horloge[9].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[10].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[10].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[10].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[11].DivX/FD0/val (FF)
+  Destination Clock: Horloge[10].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[11].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[11].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[11].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[12].DivX/FD0/val (FF)
+  Destination Clock: Horloge[11].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[12].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[12].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[12].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[13].DivX/FD0/val (FF)
+  Destination Clock: Horloge[12].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[13].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[13].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[13].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[14].DivX/FD0/val (FF)
+  Destination Clock: Horloge[13].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[14].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[14].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[14].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[15].DivX/FD0/val (FF)
+  Destination Clock: Horloge[14].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[15].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[15].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[15].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[16].DivX/FD0/val (FF)
+  Destination Clock: Horloge[15].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[16].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[16].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[16].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[17].DivX/FD0/val (FF)
+  Destination Clock: Horloge[16].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[17].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[17].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[17].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[18].DivX/FD0/val (FF)
+  Destination Clock: Horloge[17].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[18].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[18].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[18].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[19].DivX/FD0/val (FF)
+  Destination Clock: Horloge[18].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[19].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[19].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[19].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[20].DivX/FD0/val (FF)
+  Destination Clock: Horloge[19].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[20].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[20].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[20].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[21].DivX/FD0/val (FF)
+  Destination Clock: Horloge[20].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[21].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[21].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[21].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[22].DivX/FD0/val (FF)
+  Destination Clock: Horloge[21].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[22].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[22].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[22].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[23].DivX/FD0/val (FF)
+  Destination Clock: Horloge[22].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[23].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[23].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[23].DivX/FD0/val'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       Horloge[24].DivX/FD0/val (FF)
+  Destination Clock: Horloge[23].DivX/FD0/val rising
+
+  Data Path: reset to Horloge[24].DivX/FD0/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          Horloge[24].DivX/FD0/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Horloge[24].DivX/FD0/val'
+  Total number of paths / destination ports: 8 / 8
+-------------------------------------------------------------------------
+Offset:              1.369ns (Levels of Logic = 2)
+  Source:            reset (PAD)
+  Destination:       FD3/val (FF)
+  Destination Clock: Horloge[24].DivX/FD0/val rising
+
+  Data Path: reset to FD3/val
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            31   0.000   0.551  reset_IBUF (reset_IBUF)
+     INV:I->O             30   0.067   0.551  Div0/FD0/reset_inv1_INV_0 (Div0/FD0/reset_inv)
+     FDRE:CE                   0.200          FD3/val
+    ----------------------------------------
+    Total                      1.369ns (0.267ns logic, 1.102ns route)
+                                       (19.5% logic, 80.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'Horloge[24].DivX/FD0/val'
+  Total number of paths / destination ports: 4 / 4
+-------------------------------------------------------------------------
+Offset:              0.708ns (Levels of Logic = 1)
+  Source:            FD0/val (FF)
+  Destination:       s0 (PAD)
+  Source Clock:      Horloge[24].DivX/FD0/val rising
+
+  Data Path: FD0/val to s0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             5   0.282   0.426  FD0/val (FD0/val)
+     OBUF:I->O                 0.000          s0_OBUF (s0)
+    ----------------------------------------
+    Total                      0.708ns (0.282ns logic, 0.426ns route)
+                                       (39.8% logic, 60.2% route)
+
+=========================================================================
+
+Cross Clock Domains Report:
+--------------------------
+
+Clock to Setup on destination clock Div0/FD0/val
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+Div0/FD0/val   |    1.164|         |         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[0].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[0].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[10].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[10].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[11].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[11].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[12].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[12].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[13].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[13].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[14].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[14].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[15].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[15].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[16].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[16].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[17].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[17].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[18].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[18].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[19].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[19].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[1].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[1].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[20].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[20].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[21].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[21].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[22].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[22].DivX/FD0/val|    1.164|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[23].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[23].DivX/FD0/val|    1.185|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[24].DivX/FD0/val
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+Horloge[24].DivX/FD0/val|    1.185|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[2].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[2].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[3].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[3].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[4].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[4].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[5].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[5].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[6].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[6].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[7].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[7].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[8].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[8].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock Horloge[9].DivX/FD0/val
+-----------------------+---------+---------+---------+---------+
+                       | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock           |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-----------------------+---------+---------+---------+---------+
+Horloge[9].DivX/FD0/val|    1.164|         |         |         |
+-----------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock clk
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+clk            |    1.164|         |         |         |
+---------------+---------+---------+---------+---------+
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 7.00 secs
+Total CPU time to Xst completion: 6.96 secs
+ 
+--> 
+
+
+Total memory usage is 610964 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    0 (   0 filtered)
+Number of infos    :    7 (   0 filtered)
+

@@ -1,0 +1,15 @@
+ADDRESS_SPACE tpoot24 RAMB16 [0x00000000:0x00001FFF]
+    BUS_BLOCK
+        i_periph/iRAM/XLXI_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        i_periph/iRAM/XLXI_1 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        i_periph/iRAM/XLXI_2 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        i_periph/iRAM/XLXI_3 [7:0];
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+

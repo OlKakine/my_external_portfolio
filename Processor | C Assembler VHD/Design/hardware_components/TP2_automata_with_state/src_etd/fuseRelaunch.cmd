@@ -1,0 +1,1 @@
+-intstyle "xflow" -incremental -lib "secureip" -o "tb_compteurgene_isim_beh.exe" -prj "tb_compteurgene.prj" "work.tb_compteurgene" 

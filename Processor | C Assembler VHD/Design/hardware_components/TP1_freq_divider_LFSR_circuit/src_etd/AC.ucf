@@ -1,0 +1,11 @@
+# Interrupteur 0
+NET "a"        LOC=G15 | IOSTANDARD=LVCMOS33; 
+# Interrupteur 1
+NET "b"        LOC=P15 | IOSTANDARD=LVCMOS33; 
+# Interrupteur 2
+NET "c"        LOC=W13 | IOSTANDARD=LVCMOS33; 
+# LED 0
+NET "s"        LOC=M14 | IOSTANDARD=LVCMOS33; 
+# LED 1
+NET "co"        LOC=M15 | IOSTANDARD=LVCMOS33; 
+

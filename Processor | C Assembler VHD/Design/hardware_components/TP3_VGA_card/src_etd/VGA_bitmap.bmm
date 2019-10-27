@@ -1,0 +1,194 @@
+ADDRESS_SPACE tpoot24 RAMB16 [0x00000000:0x00038FFF]
+    BUS_BLOCK
+        cRAM_VIDEO/RAM0_2 [23:16];
+        cRAM_VIDEO/RAM0_1 [15:8];
+        cRAM_VIDEO/RAM0_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM1_2 [23:16];
+        cRAM_VIDEO/RAM1_1 [15:8];
+        cRAM_VIDEO/RAM1_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM2_2 [23:16];
+        cRAM_VIDEO/RAM2_1 [15:8];
+        cRAM_VIDEO/RAM2_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM3_2 [23:16];
+        cRAM_VIDEO/RAM3_1 [15:8];
+        cRAM_VIDEO/RAM3_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM4_2 [23:16];
+        cRAM_VIDEO/RAM4_1 [15:8];
+        cRAM_VIDEO/RAM4_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM5_2 [23:16];
+        cRAM_VIDEO/RAM5_1 [15:8];
+        cRAM_VIDEO/RAM5_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM6_2 [23:16];
+        cRAM_VIDEO/RAM6_1 [15:8];
+        cRAM_VIDEO/RAM6_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM7_2 [23:16];
+        cRAM_VIDEO/RAM7_1 [15:8];
+        cRAM_VIDEO/RAM7_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM8_2 [23:16];
+        cRAM_VIDEO/RAM8_1 [15:8];
+        cRAM_VIDEO/RAM8_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM9_2 [23:16];
+        cRAM_VIDEO/RAM9_1 [15:8];
+        cRAM_VIDEO/RAM9_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM10_2 [23:16];
+        cRAM_VIDEO/RAM10_1 [15:8];
+        cRAM_VIDEO/RAM10_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM11_2 [23:16];
+        cRAM_VIDEO/RAM11_1 [15:8];
+        cRAM_VIDEO/RAM11_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM12_2 [23:16];
+        cRAM_VIDEO/RAM12_1 [15:8];
+        cRAM_VIDEO/RAM12_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM13_2 [23:16];
+        cRAM_VIDEO/RAM13_1 [15:8];
+        cRAM_VIDEO/RAM13_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM14_2 [23:16];
+        cRAM_VIDEO/RAM14_1 [15:8];
+        cRAM_VIDEO/RAM14_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM15_2 [23:16];
+        cRAM_VIDEO/RAM15_1 [15:8];
+        cRAM_VIDEO/RAM15_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM16_2 [23:16];
+        cRAM_VIDEO/RAM16_1 [15:8];
+        cRAM_VIDEO/RAM16_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM17_2 [23:16];
+        cRAM_VIDEO/RAM17_1 [15:8];
+        cRAM_VIDEO/RAM17_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM18_2 [23:16];
+        cRAM_VIDEO/RAM18_1 [15:8];
+        cRAM_VIDEO/RAM18_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM19_2 [23:16];
+        cRAM_VIDEO/RAM19_1 [15:8];
+        cRAM_VIDEO/RAM19_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM20_2 [23:16];
+        cRAM_VIDEO/RAM20_1 [15:8];
+        cRAM_VIDEO/RAM20_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM21_2 [23:16];
+        cRAM_VIDEO/RAM21_1 [15:8];
+        cRAM_VIDEO/RAM21_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM22_2 [23:16];
+        cRAM_VIDEO/RAM22_1 [15:8];
+        cRAM_VIDEO/RAM22_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM23_2 [23:16];
+        cRAM_VIDEO/RAM23_1 [15:8];
+        cRAM_VIDEO/RAM23_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM24_2 [23:16];
+        cRAM_VIDEO/RAM24_1 [15:8];
+        cRAM_VIDEO/RAM24_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM25_2 [23:16];
+        cRAM_VIDEO/RAM25_1 [15:8];
+        cRAM_VIDEO/RAM25_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM26_2 [23:16];
+        cRAM_VIDEO/RAM26_1 [15:8];
+        cRAM_VIDEO/RAM26_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM27_2 [23:16];
+        cRAM_VIDEO/RAM27_1 [15:8];
+        cRAM_VIDEO/RAM27_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM28_2 [23:16];
+        cRAM_VIDEO/RAM28_1 [15:8];
+        cRAM_VIDEO/RAM28_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM29_2 [23:16];
+        cRAM_VIDEO/RAM29_1 [15:8];
+        cRAM_VIDEO/RAM29_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM30_2 [23:16];
+        cRAM_VIDEO/RAM30_1 [15:8];
+        cRAM_VIDEO/RAM30_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM31_2 [23:16];
+        cRAM_VIDEO/RAM31_1 [15:8];
+        cRAM_VIDEO/RAM31_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM32_2 [23:16];
+        cRAM_VIDEO/RAM32_1 [15:8];
+        cRAM_VIDEO/RAM32_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM33_2 [23:16];
+        cRAM_VIDEO/RAM33_1 [15:8];
+        cRAM_VIDEO/RAM33_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM34_2 [23:16];
+        cRAM_VIDEO/RAM34_1 [15:8];
+        cRAM_VIDEO/RAM34_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM35_2 [23:16];
+        cRAM_VIDEO/RAM35_1 [15:8];
+        cRAM_VIDEO/RAM35_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM36_2 [23:16];
+        cRAM_VIDEO/RAM36_1 [15:8];
+        cRAM_VIDEO/RAM36_0 [7:0];
+    END_BUS_BLOCK;
+    BUS_BLOCK
+        cRAM_VIDEO/RAM37_2 [23:16];
+        cRAM_VIDEO/RAM37_1 [15:8];
+        cRAM_VIDEO/RAM37_0 [7:0];
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+
+

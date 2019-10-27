@@ -1,0 +1,1 @@
+-intstyle "xflow" -incremental -lib "secureip" -o "tb_PGCD_isim_beh.exe" -prj "tb_PGCD.prj" "work.tb_PGCD" 

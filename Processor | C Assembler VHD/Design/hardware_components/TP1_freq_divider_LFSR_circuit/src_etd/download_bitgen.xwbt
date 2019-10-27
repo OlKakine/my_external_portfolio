@@ -1,0 +1,8 @@
+INTSTYLE=xflow
+INFILE=/user/1/.base/checchio/home/Documents/tp_archi/src_etd/AC.ncd
+OUTFILE=/user/1/.base/checchio/home/Documents/tp_archi/src_etd/download.bit
+FAMILY=Zynq
+PART=xc7z010-1clg400
+WORKINGDIR=/user/1/.base/checchio/home/Documents/tp_archi/src_etd
+LICENSE=WebPack
+USER_INFO=211048036_0_0_210

@@ -1,0 +1,3 @@
+vhdl work "vhd/basc_d.vhd"
+vhdl work "vhd/basc_d_set.vhd"
+vhdl work "vhd/auto_unparmin.vhd"

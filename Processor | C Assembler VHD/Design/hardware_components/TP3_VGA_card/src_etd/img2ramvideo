@@ -1,0 +1,53 @@
+#!/bin/bash
+if [ $# -eq 0 ];
+then
+echo "Utilitaire servant à placer le contenu d'une image dans la mémoire du TP"    
+echo "usage : img2ramvideo nom_image "
+exit -1
+fi
+fname=$1
+fdest=vhd/RAM_Video_infered.vhd
+
+cat << EOF > $fdest
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity RAM_VIDEO is
+  port ( 
+    clk  : in    std_logic;   
+    addr : in    unsigned (16 downto 0); 
+    do   : out   unsigned(23 downto 0)
+    );
+end RAM_VIDEO;
+
+architecture Behavioral of RAM_VIDEO is
+  subtype mot is unsigned( 23 downto 0 );
+  type zone_memoire is array (natural range 0 to 640*480/4-1) of mot;
+  signal ROM: zone_memoire :=(
+EOF
+
+# On utilise convert pour sortir sur stdout un PPM où les composantes sont stockés sur 2 bits (MSB)
+# le ppm est redirigé vers awk
+# NR>3 pour virer l'entete du ppm
+# On regroupe 12 composantes (RG ou B)dans un seul mot d'où nO=12
+# chaque octet du ppm ne contient que 2 bits d'info d'où rshift($i,6)
+# n sert à positionner l'octet dans le mot et v calcule la valeur
+# a est l'adresse du mot de 24 bits
+
+convert $1 -resize 640x480 -extent 640x480 -depth 2 -colorspace RGB -compress none ppm:- | awk 'BEGIN {v=0;n0=12;n=n0;a=0;} NR>3 {for (i=1;i<=NF;i++) {n--; v+=lshift(rshift($i,6),2*n) ; if (n==0) { printf "   "a" => x\"%06x\",\n", v;v=0;n=n0;a++} }} ' >> $fdest
+
+cat << EOF >> $fdest
+ others => x"FFFFFF"
+    );
+begin
+  process(CLK)
+  begin 
+    if (CLK'event AND CLK='1') then
+      do <= ROM(to_integer(addr));
+    end if;
+  end process;
+end Behavioral;
+EOF
+
+

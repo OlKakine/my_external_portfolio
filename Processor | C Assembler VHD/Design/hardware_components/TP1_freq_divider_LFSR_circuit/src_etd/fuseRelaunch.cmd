@@ -1,0 +1,1 @@
+-intstyle "xflow" -incremental -lib "secureip" -o "tb_lfsr_isim_beh.exe" -prj "tb_lfsr.prj" "work.tb_lfsr" 

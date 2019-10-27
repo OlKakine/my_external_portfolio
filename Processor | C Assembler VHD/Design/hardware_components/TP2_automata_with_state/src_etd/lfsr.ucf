@@ -1,0 +1,10 @@
+# Bouton 0
+NET "reset"        LOC=R18 | IOSTANDARD=LVCMOS33; 
+# LED 0
+NET "s"        LOC=M14 | IOSTANDARD=LVCMOS33; 
+## Pmod Header JE
+#Patte 1
+NET "clk"        LOC=V12 | IOSTANDARD=LVCMOS33; 
+NET "clk" CLOCK_DEDICATED_ROUTE = FALSE;
+
+

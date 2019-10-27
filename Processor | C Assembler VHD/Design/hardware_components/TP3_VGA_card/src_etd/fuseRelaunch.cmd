@@ -1,0 +1,1 @@
+-intstyle "xflow" -incremental -lib "secureip" -o "tb_VGA_isim_beh.exe" -prj "tb_VGA_bitmap.prj" "work.tb_VGA" 
